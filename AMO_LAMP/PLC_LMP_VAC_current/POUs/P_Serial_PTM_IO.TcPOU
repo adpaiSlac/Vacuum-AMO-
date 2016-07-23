@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="P_Serial_PTM_IO" Id="{d8905e59-3b6f-4b8c-9776-3a00bdb2657e}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM P_Serial_PTM_IO
+VAR
+	fb_IC_P1_PfeifferCom : FB_PFEIFFER_COM;
+	fb_R10_A_P1_OerlikonTD20 : FB_Oerlikon_TD20_COM;
+
+	xFirstScan: BOOL := TRUE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*
+This program takes care of calling the FB_PFEIFFER_COM blocks
+ which are responsible for carrying out the IO communications over serial.
+ It is placed in it's own PLC task to give it independence from when the 
+ supervisor programs.
+
+This program is called from A00_MAIN
+ 
+*)
+
+// Calling port specific communication function blocks
+
+// IC EP6002 - Port 1
+fb_IC_P1_PfeifferCom(astPfeifferControl := g_astPfe_CTRL,
+				 astPfeifferStatus	:= g_astPfe_RBK,
+				 afbPfeifferSerialDriver := g_afbPfe_SerialDriver,
+
+				SerialRXBuffer:= IC_P1_SerialRXBuffer,
+				SerialTXBuffer:= IC_P1_SerialTXBuffer);
+
+// R10 A - Port 1				
+fb_R10_A_P1_OerlikonTD20(astTD20Status := g_astTD20_RBK,
+				fbTD20SerialDriver := g_astTD20_SerialDriver,
+
+				SerialRXBuffer := R10_A_P1_SerialRXBuffer,
+				 SerialTXBuffer := R10_A_P1_SerialTXBuffer);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

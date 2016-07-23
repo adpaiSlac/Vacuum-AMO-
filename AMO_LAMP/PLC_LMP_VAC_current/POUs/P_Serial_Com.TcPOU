@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <POU Name="P_Serial_Com" Id="{fa981f30-4d2c-4d48-ab6c-00ec78d696a1}">
+    <Declaration><![CDATA[PROGRAM P_Serial_Com
+VAR
+	fbSerialLineControl: SerialLineControl;
+	fbSerialLineControl1: SerialLineControl;
+	fbSerialLineControl2: SerialLineControl;
+	fbSerialLineControl3: SerialLineControl;
+	fbSerialLineControl5: SerialLineControl;
+	fbSerialLineControl4: SerialLineControl;
+	fbSerialLineControl6: SerialLineControl;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+(* Serial port 0 com function *)
+fbSerialLineControl(
+	Mode:= SERIALLINEMODE_EL6_22B (*SERIALLINEMODE_KL6_22B_STANDARD*),
+	pComIn:= ADR(DET_P1_stComIn),
+	pComOut:=ADR(DET_P1_stComOut) ,
+	SizeComIn:= SIZEOF(DET_P1_stComIn),
+	TxBuffer:= DET_P1_SerialTXBuffer,
+	RxBuffer:= DET_P1_SerialRXBuffer,
+	Error=> ,
+	ErrorID=> );
+	
+(* Serial port 1 com function *)
+fbSerialLineControl(
+	Mode:= SERIALLINEMODE_EL6_22B (*SERIALLINEMODE_KL6_22B_STANDARD*),
+	pComIn:= ADR(DET_P2_stComIn),
+	pComOut:=ADR(DET_P2_stComOut) ,
+	SizeComIn:= SIZEOF(DET_P2_stComIn),
+	TxBuffer:= DET_P2_SerialTXBuffer,
+	RxBuffer:= DET_P2_SerialRXBuffer,
+	Error=> ,
+	ErrorID=> );
+
+(*Serial port 2 com function*)
+fbSerialLineControl2(
+	Mode:= SERIALLINEMODE_EL6_22B (*SERIALLINEMODE_KL6_22B_STANDARD*),
+	pComIn:= ADR(IC_P1_stComIn),
+	pComOut:=ADR(IC_P1_stComOut) ,
+	SizeComIn:= SIZEOF(IC_P1_stComIn),
+	TxBuffer:= IC_P1_SerialTXBuffer,
+	RxBuffer:= IC_P1_SerialRXBuffer,
+	Error=> ,
+	ErrorID=> );
+
+(*Serial port Interaction Chamber, port 2, com function*)
+fbSerialLineControl5(
+	Mode:= SERIALLINEMODE_EL6_22B (*SERIALLINEMODE_KL6_22B_STANDARD*),
+	pComIn:= ADR(IC_P2_stComIn),
+	pComOut:=ADR(IC_P2_stComOut) ,
+	SizeComIn:= SIZEOF(IC_P2_stComIn),
+	TxBuffer:= IC_P2_SerialTXBuffer,
+	RxBuffer:= IC_P2_SerialRXBuffer,
+	Error=> ,
+	ErrorID=> );
+
+(* Serial port 1 on R10 A  com function *)
+fbSerialLineControl4(
+	Mode:= SERIALLINEMODE_EL6_22B (*SERIALLINEMODE_KL6_22B_STANDARD*),
+	pComIn:= ADR(R10_A_P1_stComIn),
+	pComOut:=ADR(R10_A_P1_stComOut),
+	SizeComIn:= SIZEOF(R10_A_P1_stComIn),
+	TxBuffer:= R10_A_P1_SerialTXBuffer,
+	RxBuffer:= R10_A_P1_SerialRXBuffer,
+	Error=> ,
+	ErrorID=> );
+	
+	(* Serial port 1 on R10 A  com function *)
+fbSerialLineControl4(
+	Mode:= SERIALLINEMODE_EL6_22B (*SERIALLINEMODE_KL6_22B_STANDARD*),
+	pComIn:= ADR(R10_A_P2_stComIn),
+	pComOut:=ADR(R10_A_P2_stComOut),
+	SizeComIn:= SIZEOF(R10_A_P2_stComIn),
+	TxBuffer:= R10_A_P2_SerialTXBuffer,
+	RxBuffer:= R10_A_P2_SerialRXBuffer,
+	Error=> ,
+	ErrorID=> );
+	
+(* Serial port 1 on R10 B  com function *)
+fbSerialLineControl6(
+	Mode:= SERIALLINEMODE_EL6_22B (*SERIALLINEMODE_KL6_22B_STANDARD*),
+	pComIn:= ADR(R10_B_P1_stComIn),
+	pComOut:=ADR(R10_B_P1_stComOut),
+	SizeComIn:= SIZEOF(R10_B_P1_stComIn),
+	TxBuffer:= R10_B_P1_SerialTXBuffer,
+	RxBuffer:= R10_B_P1_SerialRXBuffer,
+	Error=> ,
+	ErrorID=> );
+	
+(* Serial port 2 on R10 B  com function *)
+fbSerialLineControl6(
+	Mode:= SERIALLINEMODE_EL6_22B (*SERIALLINEMODE_KL6_22B_STANDARD*),
+	pComIn:= ADR(R10_B_P2_stComIn),
+	pComOut:=ADR(R10_B_P2_stComOut),
+	SizeComIn:= SIZEOF(R10_B_P2_stComIn),
+	TxBuffer:= R10_B_P2_SerialTXBuffer,
+	RxBuffer:= R10_B_P2_SerialRXBuffer,
+	Error=> ,
+	ErrorID=> );]]></ST>
+    </Implementation>
+    <ObjectProperties />
+  </POU>
+</TcPlcObject>

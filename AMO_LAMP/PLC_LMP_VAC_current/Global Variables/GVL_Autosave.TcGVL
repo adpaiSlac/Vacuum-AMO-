@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <GVL Name="GVL_Autosave" Id="{af0e799e-b28d-4129-9bcb-3b5c818985c7}">
+    <Declaration><![CDATA[VAR_GLOBAL PERSISTENT
+	
+gp_LMP_VG			:	ARRAY[0..50] OF ST_VG;
+
+
+END_VAR]]></Declaration>
+    <ObjectProperties />
+  </GVL>
+</TcPlcObject>

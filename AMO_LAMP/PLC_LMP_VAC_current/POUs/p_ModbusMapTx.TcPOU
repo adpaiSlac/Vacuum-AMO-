@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="p_ModbusMapTx" Id="{a86401e9-aae1-462b-bbdb-e1b399507656}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM p_ModbusMapTx
+VAR
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Modbus map Tx *)
+(* This goes on the PLC *)
+
+
+(* Binary controls from the PLC back to EPICS *)
+mb_Output_Coils[0] := xLOTO;
+mb_Output_Coils[1] := LMP_Sys00.xOverrideMode;
+
+mb_Output_Coils[100]:=aLMP_PTM[10].i_xRunSW;
+mb_Output_Coils[101]:=aLMP_PTM[11].i_xRunSW;
+mb_Output_Coils[102]:=aLMP_PTM[30].i_xRunSW;
+mb_Output_Coils[103]:=aLMP_PTM[31].i_xRunSW;
+mb_Output_Coils[104]:=aLMP_PTM[32].i_xRunSW;
+mb_Output_Coils[105]:=aLMP_PTM[33].i_xRunSW;
+mb_Output_Coils[106]:=aLMP_PTM[40].i_xRunSW;
+mb_Output_Coils[107]:=LMP_PTM44.i_xRunSW;
+mb_Output_Coils[108]:=aLMP_PTM[41].i_xRunSW;
+mb_Output_Coils[109]:=aLMP_PTM[20].i_xRunSW;
+mb_Output_Coils[110]:=aLMP_PTM[21].i_xRunSW;
+mb_Output_Coils[150]:=LMP_VG[10].xHV_SW;
+mb_Output_Coils[151]:=LMP_VG[12].xHV_SW;
+mb_Output_Coils[152]:=LMP_VG[22].xHV_SW;
+mb_Output_Coils[153]:=LMP_VG[31].xHV_SW;
+mb_Output_Coils[154]:=LMP_VG[13].xHV_SW;
+mb_Output_Coils[155]:=LMP_VG[11].xHV_SW;
+mb_Output_Coils[156]:=LMP_VG[20].xHV_SW;
+mb_Output_Coils[157]:=LMP_VG[30].xHV_SW;
+mb_Output_Coils[158]:=LMP_VG[43].xHV_SW;
+mb_Output_Coils[159]:=LMP_VG[42].xHV_SW;
+mb_Output_Coils[160]:=LMP_VG[01].xHV_SW;
+mb_Output_Coils[161]:=LMP_VG[02].xHV_SW;
+mb_Output_Coils[162]:=LMP_VG[41].xHV_SW;
+mb_Output_Coils[163]:=LMP_VG[40].xHV_SW;
+mb_Output_Coils[164]:=LMP_VG[21].xHV_SW;
+mb_Output_Coils[165]:=LMP_VG[03].xHV_SW;
+mb_Output_Coils[166]:=LMP_VG[04].xHV_SW;
+mb_Output_Coils[167]:=LMP_VG[05].xHV_SW;
+
+
+
+mb_Output_Coils[10]:=LMP_VGC30.xOPN_SW;
+mb_Output_Coils[11]:=LMP_VGC10.xOPN_SW;
+mb_Output_Coils[12]:=LMP_VRC04.xOPN_SW;
+mb_Output_Coils[13]:=LMP_VRC03.xOPN_SW;
+mb_Output_Coils[14]:=LMP_VRC01.xOPN_SW;
+mb_Output_Coils[15]:=LMP_VRC02.xOPN_SW;
+mb_Output_Coils[16]:=LMP_VRC05.xOPN_SW;
+mb_Output_Coils[17]:=LMP_VRC06.xOPN_SW;
+mb_Output_Coils[18]:=LMP_VRC07.xOPN_SW;
+mb_Output_Coils[60]:=LMP_VCCUSR.xOPN_SW;
+
+mb_Output_Coils[50]:=LMP_VRC01.xOvrdOpn;
+mb_Output_Coils[51]:=LMP_VRC02.xOvrdOpn;
+mb_Output_Coils[52]:=LMP_VRC03.xOvrdOpn;
+//mb_Output_Coils[53]:=LMP_VRC04.xOvrdOpn;
+mb_Output_Coils[54]:=LMP_VRC05.xOvrdOpn;
+mb_Output_Coils[55]:=LMP_VRC06.xOvrdOpn;
+mb_Output_Coils[56]:=LMP_VRC07.xOvrdOpn;
+
+mb_Output_Coils[200]:=LMP_ENC01.xENC_PWR_SW;
+mb_Output_Coils[201]:=LMP_ENC02.xENC_PWR_SW;
+mb_Output_Coils[202]:=LMP_ENC03.xENC_PWR_SW;
+
+
+
+(* Real controls from PLC back to EPICS (32-bit) *)
+
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[200]), srcAddr:=ADR(LMP_VG[10].rVAC_SP), n:=SIZEOF(LMP_VG[10].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[202]), srcAddr:=ADR(LMP_VG[12].rVAC_SP), n:=SIZEOF(LMP_VG[12].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[204]), srcAddr:=ADR(LMP_VG[22].rVAC_SP), n:=SIZEOF(LMP_VG[22].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[206]), srcAddr:=ADR(LMP_VG[31].rVAC_SP), n:=SIZEOF(LMP_VG[31].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[208]), srcAddr:=ADR(LMP_VG[13].rVAC_SP), n:=SIZEOF(LMP_VG[13].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[210]), srcAddr:=ADR(LMP_VG[11].rVAC_SP), n:=SIZEOF(LMP_VG[11].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[212]), srcAddr:=ADR(LMP_VG[20].rVAC_SP), n:=SIZEOF(LMP_VG[20].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[214]), srcAddr:=ADR(LMP_VG[30].rVAC_SP), n:=SIZEOF(LMP_VG[30].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[216]), srcAddr:=ADR(LMP_VG[43].rVAC_SP), n:=SIZEOF(LMP_VG[43].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[218]), srcAddr:=ADR(LMP_VG[42].rVAC_SP), n:=SIZEOF(LMP_VG[42].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[220]), srcAddr:=ADR(LMP_VG[01].rVAC_SP), n:=SIZEOF(LMP_VG[01].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[222]), srcAddr:=ADR(LMP_VG[02].rVAC_SP), n:=SIZEOF(LMP_VG[02].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[224]), srcAddr:=ADR(LMP_VG[41].rVAC_SP), n:=SIZEOF(LMP_VG[41].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[226]), srcAddr:=ADR(LMP_VG[40].rVAC_SP), n:=SIZEOF(LMP_VG[40].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[228]), srcAddr:=ADR(LMP_VG[21].rVAC_SP), n:=SIZEOF(LMP_VG[21].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[230]), srcAddr:=ADR(LMP_VG[03].rVAC_SP), n:=SIZEOF(LMP_VG[03].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[232]), srcAddr:=ADR(LMP_VG[04].rVAC_SP), n:=SIZEOF(LMP_VG[04].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[234]), srcAddr:=ADR(LMP_VG[05].rVAC_SP), n:=SIZEOF(LMP_VG[05].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[236]), srcAddr:=ADR(LMP_VG[06].rVAC_SP), n:=SIZEOF(LMP_VG[06].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[238]), srcAddr:=ADR(LMP_VG[07].rVAC_SP), n:=SIZEOF(LMP_VG[07].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[240]), srcAddr:=ADR(g_rExtIlkPres), n:=SIZEOF(g_rExtIlkPres));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[242]), srcAddr:=ADR(LMP_VG[32].rVAC_SP), n:=SIZEOF(LMP_VG[32].rVAC_SP));
+
+
+(* Binary readbacks from the PLC *)
+
+mb_Input_Coils[0]:=aLMP_PTM[10].xExtRunOk;
+mb_Input_Coils[1]:=aLMP_PTM[10].i_xAtSpd;
+mb_Input_Coils[2]:=aLMP_PTM[10].xFault;
+mb_Input_Coils[3]:=aLMP_PTM[10].xCommTimeout;
+mb_Input_Coils[4]:=aLMP_PTM[10].i_xAccel;
+mb_Input_Coils[5]:=aLMP_PTM[10].i_xTempFault;
+mb_Input_Coils[6]:=aLMP_PTM[11].xExtRunOk;
+mb_Input_Coils[7]:=aLMP_PTM[11].i_xAtSpd;
+mb_Input_Coils[8]:=aLMP_PTM[11].xFault;
+mb_Input_Coils[9]:=aLMP_PTM[11].xCommTimeout;
+mb_Input_Coils[10]:=aLMP_PTM[11].i_xAccel;
+mb_Input_Coils[11]:=aLMP_PTM[11].i_xTempFault;
+mb_Input_Coils[12]:=aLMP_PTM[30].xExtRunOk;
+mb_Input_Coils[13]:=aLMP_PTM[30].i_xAtSpd;
+mb_Input_Coils[14]:=aLMP_PTM[30].xFault;
+mb_Input_Coils[15]:=aLMP_PTM[30].xCommTimeout;
+mb_Input_Coils[16]:=aLMP_PTM[30].i_xAccel;
+mb_Input_Coils[17]:=aLMP_PTM[30].i_xTempFault;
+mb_Input_Coils[18]:=aLMP_PTM[31].xExtRunOk;
+mb_Input_Coils[19]:=aLMP_PTM[31].i_xAtSpd;
+mb_Input_Coils[20]:=aLMP_PTM[31].xFault;
+mb_Input_Coils[21]:=aLMP_PTM[31].xCommTimeout;
+mb_Input_Coils[22]:=aLMP_PTM[31].i_xAccel;
+mb_Input_Coils[23]:=aLMP_PTM[31].i_xTempFault;
+mb_Input_Coils[24]:=aLMP_PTM[32].xExtRunOk;
+mb_Input_Coils[25]:=aLMP_PTM[32].i_xAtSpd;
+mb_Input_Coils[26]:=aLMP_PTM[32].xFault;
+mb_Input_Coils[27]:=aLMP_PTM[32].xCommTimeout;
+mb_Input_Coils[28]:=aLMP_PTM[32].i_xAccel;
+mb_Input_Coils[29]:=aLMP_PTM[32].i_xTempFault;
+mb_Input_Coils[30]:=aLMP_PTM[33].xExtRunOk;
+mb_Input_Coils[31]:=aLMP_PTM[33].i_xAtSpd;
+mb_Input_Coils[32]:=aLMP_PTM[33].xFault;
+mb_Input_Coils[33]:=aLMP_PTM[33].xCommTimeout;
+mb_Input_Coils[34]:=aLMP_PTM[33].i_xAccel;
+mb_Input_Coils[35]:=aLMP_PTM[33].i_xTempFault;
+mb_Input_Coils[36]:=aLMP_PTM[40].xExtRunOk;
+mb_Input_Coils[37]:=aLMP_PTM[40].i_xAtSpd;
+mb_Input_Coils[38]:=aLMP_PTM[40].xFault;
+mb_Input_Coils[39]:=aLMP_PTM[40].xCommTimeout;
+mb_Input_Coils[40]:=aLMP_PTM[40].i_xAccel;
+mb_Input_Coils[41]:=aLMP_PTM[40].i_xTempFault;
+mb_Input_Coils[42]:=LMP_PTM44.xExtRunOk;
+mb_Input_Coils[43]:=LMP_PTM44.i_xAtSpd;
+mb_Input_Coils[44]:=LMP_PTM44.xFault;
+mb_Input_Coils[45]:=LMP_PTM44.xCommTimeout;
+mb_Input_Coils[46]:=LMP_PTM44.i_xAccel;
+mb_Input_Coils[47]:=LMP_PTM44.i_xTempFault;
+mb_Input_Coils[48]:=aLMP_PTM[41].xExtRunOk;
+mb_Input_Coils[49]:=aLMP_PTM[41].i_xAtSpd;
+mb_Input_Coils[50]:=aLMP_PTM[41].xFault;
+mb_Input_Coils[51]:=aLMP_PTM[41].xCommTimeout;
+mb_Input_Coils[52]:=aLMP_PTM[41].i_xAccel;
+mb_Input_Coils[53]:=aLMP_PTM[41].i_xTempFault;
+mb_Input_Coils[54]:=LMP_VG[10].xAT_VAC;
+mb_Input_Coils[55]:=LMP_VG[10].xPRESS_OK;
+mb_Input_Coils[56]:=LMP_VG[10].xHV_DIS;
+mb_Input_Coils[57]:=LMP_VG[12].xAT_VAC;
+mb_Input_Coils[58]:=LMP_VG[12].xPRESS_OK;
+mb_Input_Coils[59]:=LMP_VG[12].xHV_DIS;
+mb_Input_Coils[60]:=LMP_VG[22].xAT_VAC;
+mb_Input_Coils[61]:=LMP_VG[22].xPRESS_OK;
+mb_Input_Coils[62]:=LMP_VG[22].xHV_DIS;
+mb_Input_Coils[63]:=LMP_VG[31].xAT_VAC;
+mb_Input_Coils[64]:=LMP_VG[31].xPRESS_OK;
+mb_Input_Coils[65]:=LMP_VG[31].xHV_DIS;
+mb_Input_Coils[66]:=LMP_VG[13].xAT_VAC;
+mb_Input_Coils[67]:=LMP_VG[13].xPRESS_OK;
+mb_Input_Coils[68]:=LMP_VG[13].xHV_DIS;
+mb_Input_Coils[69]:=LMP_VG[11].xAT_VAC;
+mb_Input_Coils[70]:=LMP_VG[11].xPRESS_OK;
+mb_Input_Coils[71]:=LMP_VG[11].xHV_DIS;
+mb_Input_Coils[72]:=LMP_VG[20].xAT_VAC;
+mb_Input_Coils[73]:=LMP_VG[20].xPRESS_OK;
+mb_Input_Coils[74]:=LMP_VG[20].xHV_DIS;
+mb_Input_Coils[75]:=LMP_VG[30].xAT_VAC;
+mb_Input_Coils[76]:=LMP_VG[30].xPRESS_OK;
+mb_Input_Coils[77]:=LMP_VG[30].xHV_DIS;
+mb_Input_Coils[78]:=LMP_VG[43].xAT_VAC;
+mb_Input_Coils[79]:=LMP_VG[43].xPRESS_OK;
+mb_Input_Coils[80]:=LMP_VG[43].xHV_DIS;
+mb_Input_Coils[81]:=LMP_VG[42].xAT_VAC;
+mb_Input_Coils[82]:=LMP_VG[42].xPRESS_OK;
+mb_Input_Coils[83]:=LMP_VG[42].xHV_DIS;
+mb_Input_Coils[84]:=LMP_VG[01].xAT_VAC;
+mb_Input_Coils[85]:=LMP_VG[01].xPRESS_OK;
+mb_Input_Coils[86]:=LMP_VG[01].xHV_DIS;
+mb_Input_Coils[87]:=LMP_VG[02].xAT_VAC;
+mb_Input_Coils[88]:=LMP_VG[02].xPRESS_OK;
+mb_Input_Coils[89]:=LMP_VG[02].xHV_DIS;
+mb_Input_Coils[90]:=LMP_VG[41].xAT_VAC;
+mb_Input_Coils[91]:=LMP_VG[41].xPRESS_OK;
+mb_Input_Coils[92]:=LMP_VG[41].xHV_DIS;
+mb_Input_Coils[93]:=LMP_VG[40].xAT_VAC;
+mb_Input_Coils[94]:=LMP_VG[40].xPRESS_OK;
+mb_Input_Coils[95]:=LMP_VG[40].xHV_DIS;
+mb_Input_Coils[96]:=LMP_VG[21].xAT_VAC;
+mb_Input_Coils[97]:=LMP_VG[21].xPRESS_OK;
+mb_Input_Coils[98]:=LMP_VG[21].xHV_DIS;
+mb_Input_Coils[99]:=LMP_VGC30.xOPN_OK;
+mb_Input_Coils[100]:=LMP_VGC30.xOPN_DO;
+mb_Input_Coils[101]:=LMP_VGC30.i_xOpnLS;
+mb_Input_Coils[102]:=LMP_VGC30.i_xClsLS;
+mb_Input_Coils[103]:=LMP_VGC10.xOPN_OK;
+mb_Input_Coils[104]:=LMP_VGC10.xOPN_DO;
+mb_Input_Coils[105]:=LMP_VGC10.i_xOpnLS;
+mb_Input_Coils[106]:=LMP_VGC10.i_xClsLS;
+mb_Input_Coils[107]:=LMP_VRC04.xOPN_OK;
+mb_Input_Coils[108]:=LMP_VRC04.xOPN_DO;
+mb_Input_Coils[109]:=LMP_VRC03.xOPN_OK;
+mb_Input_Coils[110]:=LMP_VRC03.xOPN_DO;
+mb_Input_Coils[111]:=LMP_VRC01.xOPN_OK;
+mb_Input_Coils[112]:=LMP_VRC01.xOPN_DO;
+mb_Input_Coils[113]:=LMP_VRC02.xOPN_OK;
+mb_Input_Coils[114]:=LMP_VRC02.xOPN_DO;
+mb_Input_Coils[115]:=LMP_VRC05.xOPN_OK;
+mb_Input_Coils[116]:=LMP_VRC05.xOPN_DO;
+mb_Input_Coils[117]:=LMP_VRC06.xOPN_OK;
+mb_Input_Coils[118]:=LMP_VRC06.xOPN_DO;
+mb_Input_Coils[119]:=LMP_VRC07.xOPN_OK;
+mb_Input_Coils[120]:=LMP_VRC07.xOPN_DO;
+mb_Input_Coils[121]:=LMP_ENC01.xENC_PWR;
+mb_Input_Coils[122]:=LMP_ENC02.xENC_PWR;
+mb_Input_Coils[123]:=LMP_ENC03.xENC_PWR;
+mb_Input_Coils[124]:=LMP_VG[03].xAT_VAC;
+mb_Input_Coils[125]:=LMP_VG[03].xPRESS_OK;
+mb_Input_Coils[126]:=LMP_VG[03].xHV_DIS;
+mb_Input_Coils[127]:=LMP_VG[04].xAT_VAC;
+mb_Input_Coils[128]:=LMP_VG[04].xPRESS_OK;
+mb_Input_Coils[129]:=LMP_VG[04].xHV_DIS;
+mb_Input_Coils[130]:=LMP_VG[05].xAT_VAC;
+mb_Input_Coils[131]:=LMP_VG[05].xPRESS_OK;
+mb_Input_Coils[132]:=LMP_VG[05].xHV_DIS;
+mb_Input_Coils[133]:=LMP_VG[06].xAT_VAC;
+mb_Input_Coils[134]:=LMP_VG[06].xPRESS_OK;
+mb_Input_Coils[135]:=LMP_VG[06].xHV_DIS;
+mb_Input_Coils[136]:=LMP_VG[07].xAT_VAC;
+mb_Input_Coils[137]:=LMP_VG[07].xPRESS_OK;
+mb_Input_Coils[138]:=LMP_VG[07].xHV_DIS;
+(* mb_Input_Coils[139]:=H2E_VGC01.i_xOpnLS;
+mb_Input_Coils[140]:=H2E_VGC01.i_xClsLS;
+mb_Input_Coils[141]:=H2E_VGC02.i_xOpnLS;
+mb_Input_Coils[142]:=H2E_VGC02.i_xClsLS;
+mb_Input_Coils[143]:=H2E_VG01.xPRESS_OK;
+mb_Input_Coils[144]:=H2E_VG02.xPRESS_OK; *)
+mb_Input_Coils[145]:=aLMP_PTM[20].xExtRunOk;
+mb_Input_Coils[146]:=aLMP_PTM[20].i_xAtSpd;
+mb_Input_Coils[147]:=aLMP_PTM[20].xFault;
+mb_Input_Coils[148]:=aLMP_PTM[20].xCommTimeout;
+mb_Input_Coils[149]:=aLMP_PTM[20].i_xAccel;
+mb_Input_Coils[150]:=aLMP_PTM[20].i_xTempFault;
+mb_Input_Coils[151]:=aLMP_PTM[21].xExtRunOk;
+mb_Input_Coils[152]:=aLMP_PTM[21].i_xAtSpd;
+mb_Input_Coils[153]:=aLMP_PTM[21].xFault;
+mb_Input_Coils[154]:=aLMP_PTM[21].xCommTimeout;
+mb_Input_Coils[155]:=aLMP_PTM[21].i_xAccel;
+mb_Input_Coils[156]:=aLMP_PTM[21].i_xTempFault;
+mb_Input_Coils[157]:=LMP_VG[32].xAT_VAC;
+mb_Input_Coils[158]:=LMP_VG[32].xPRESS_OK;
+mb_Input_Coils[159]:=LMP_VG[32].xHV_DIS;
+
+//255 - LAMP System Output
+mb_Input_Coils[255]:=g_xExtIlkRO;
+
+
+
+(* Real readbacks from the PLC *)
+
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[0]), srcAddr:=ADR(LMP_VG[10].rPRESS), n:=SIZEOF(LMP_VG[10].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[2]), srcAddr:=ADR(LMP_VG[12].rPRESS), n:=SIZEOF(LMP_VG[12].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[4]), srcAddr:=ADR(LMP_VG[22].rPRESS), n:=SIZEOF(LMP_VG[22].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[6]), srcAddr:=ADR(LMP_VG[31].rPRESS), n:=SIZEOF(LMP_VG[31].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[8]), srcAddr:=ADR(LMP_VG[13].rPRESS), n:=SIZEOF(LMP_VG[13].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[10]), srcAddr:=ADR(LMP_VG[11].rPRESS), n:=SIZEOF(LMP_VG[11].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[12]), srcAddr:=ADR(LMP_VG[20].rPRESS), n:=SIZEOF(LMP_VG[20].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[14]), srcAddr:=ADR(LMP_VG[30].rPRESS), n:=SIZEOF(LMP_VG[30].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[16]), srcAddr:=ADR(LMP_VG[43].rPRESS), n:=SIZEOF(LMP_VG[43].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[18]), srcAddr:=ADR(LMP_VG[42].rPRESS), n:=SIZEOF(LMP_VG[42].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[20]), srcAddr:=ADR(LMP_VG[01].rPRESS), n:=SIZEOF(LMP_VG[01].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[22]), srcAddr:=ADR(LMP_VG[02].rPRESS), n:=SIZEOF(LMP_VG[02].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[24]), srcAddr:=ADR(LMP_VG[41].rPRESS), n:=SIZEOF(LMP_VG[41].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[26]), srcAddr:=ADR(LMP_VG[40].rPRESS), n:=SIZEOF(LMP_VG[40].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[28]), srcAddr:=ADR(LMP_VG[21].rPRESS), n:=SIZEOF(LMP_VG[21].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[30]), srcAddr:=ADR(LMP_VG[03].rPRESS), n:=SIZEOF(LMP_VG[03].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[32]), srcAddr:=ADR(LMP_VG[04].rPRESS), n:=SIZEOF(LMP_VG[04].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[34]), srcAddr:=ADR(LMP_VG[05].rPRESS), n:=SIZEOF(LMP_VG[05].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[36]), srcAddr:=ADR(LMP_VG[06].rPRESS), n:=SIZEOF(LMP_VG[06].rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[38]), srcAddr:=ADR(LMP_VG[07].rPRESS), n:=SIZEOF(LMP_VG[07].rPRESS));
+//MEMCPY(destAddr:=ADR(mb_PLC_Memory[40]), srcAddr:=ADR(H2E_VG01.rPRESS), n:=SIZEOF(H2E_VG01.rPRESS));
+//MEMCPY(destAddr:=ADR(mb_PLC_Memory[42]), srcAddr:=ADR(H2E_VG02.rPRESS), n:=SIZEOF(H2E_VG02.rPRESS));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[44]), srcAddr:=ADR(LMP_VG[32].rPRESS), n:=SIZEOF(LMP_VG[32].rPRESS));
+
+
+(* LONG integer readbacks from the PLC *)
+
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[500]), srcAddr:=ADR(aLMP_PTM[10].i_iCurSpd), n:=SIZEOF(aLMP_PTM[10].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[502]), srcAddr:=ADR(aLMP_PTM[10].i_diPwr), n:=SIZEOF(aLMP_PTM[10].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[504]), srcAddr:=ADR(aLMP_PTM[10].i_diElecTemp), n:=SIZEOF(aLMP_PTM[10].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[506]), srcAddr:=ADR(aLMP_PTM[10].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[10].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[508]), srcAddr:=ADR(aLMP_PTM[10].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[10].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[510]), srcAddr:=ADR(aLMP_PTM[10].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[10].i_diMtrTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[512]), srcAddr:=ADR(aLMP_PTM[11].i_iCurSpd), n:=SIZEOF(aLMP_PTM[11].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[514]), srcAddr:=ADR(aLMP_PTM[11].i_diPwr), n:=SIZEOF(aLMP_PTM[11].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[516]), srcAddr:=ADR(aLMP_PTM[11].i_diElecTemp), n:=SIZEOF(aLMP_PTM[11].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[518]), srcAddr:=ADR(aLMP_PTM[11].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[11].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[520]), srcAddr:=ADR(aLMP_PTM[11].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[11].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[522]), srcAddr:=ADR(aLMP_PTM[11].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[11].i_diMtrTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[524]), srcAddr:=ADR(aLMP_PTM[30].i_iCurSpd), n:=SIZEOF(aLMP_PTM[30].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[526]), srcAddr:=ADR(aLMP_PTM[30].i_diPwr), n:=SIZEOF(aLMP_PTM[30].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[528]), srcAddr:=ADR(aLMP_PTM[30].i_diElecTemp), n:=SIZEOF(aLMP_PTM[30].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[530]), srcAddr:=ADR(aLMP_PTM[30].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[30].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[532]), srcAddr:=ADR(aLMP_PTM[30].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[30].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[534]), srcAddr:=ADR(aLMP_PTM[30].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[30].i_diMtrTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[536]), srcAddr:=ADR(aLMP_PTM[31].i_iCurSpd), n:=SIZEOF(aLMP_PTM[31].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[538]), srcAddr:=ADR(aLMP_PTM[31].i_diPwr), n:=SIZEOF(aLMP_PTM[31].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[540]), srcAddr:=ADR(aLMP_PTM[31].i_diElecTemp), n:=SIZEOF(aLMP_PTM[31].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[542]), srcAddr:=ADR(aLMP_PTM[31].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[31].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[544]), srcAddr:=ADR(aLMP_PTM[31].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[31].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[546]), srcAddr:=ADR(aLMP_PTM[31].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[31].i_diMtrTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[548]), srcAddr:=ADR(aLMP_PTM[32].i_iCurSpd), n:=SIZEOF(aLMP_PTM[32].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[550]), srcAddr:=ADR(aLMP_PTM[32].i_diPwr), n:=SIZEOF(aLMP_PTM[32].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[552]), srcAddr:=ADR(aLMP_PTM[32].i_diElecTemp), n:=SIZEOF(aLMP_PTM[32].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[554]), srcAddr:=ADR(aLMP_PTM[32].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[32].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[556]), srcAddr:=ADR(aLMP_PTM[32].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[32].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[558]), srcAddr:=ADR(aLMP_PTM[32].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[32].i_diMtrTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[560]), srcAddr:=ADR(aLMP_PTM[33].i_iCurSpd), n:=SIZEOF(aLMP_PTM[33].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[562]), srcAddr:=ADR(aLMP_PTM[33].i_diPwr), n:=SIZEOF(aLMP_PTM[33].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[564]), srcAddr:=ADR(aLMP_PTM[33].i_diElecTemp), n:=SIZEOF(aLMP_PTM[33].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[566]), srcAddr:=ADR(aLMP_PTM[33].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[33].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[568]), srcAddr:=ADR(aLMP_PTM[33].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[33].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[570]), srcAddr:=ADR(aLMP_PTM[33].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[33].i_diMtrTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[572]), srcAddr:=ADR(aLMP_PTM[40].i_iCurSpd), n:=SIZEOF(aLMP_PTM[40].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[574]), srcAddr:=ADR(aLMP_PTM[40].i_diPwr), n:=SIZEOF(aLMP_PTM[40].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[576]), srcAddr:=ADR(aLMP_PTM[40].i_diElecTemp), n:=SIZEOF(aLMP_PTM[40].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[578]), srcAddr:=ADR(aLMP_PTM[40].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[40].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[580]), srcAddr:=ADR(aLMP_PTM[40].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[40].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[582]), srcAddr:=ADR(aLMP_PTM[40].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[40].i_diMtrTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[584]), srcAddr:=ADR(aLMP_PTM[41].i_iCurSpd), n:=SIZEOF(aLMP_PTM[41].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[586]), srcAddr:=ADR(aLMP_PTM[41].i_diPwr), n:=SIZEOF(aLMP_PTM[41].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[588]), srcAddr:=ADR(aLMP_PTM[41].i_diElecTemp), n:=SIZEOF(aLMP_PTM[41].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[590]), srcAddr:=ADR(aLMP_PTM[41].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[41].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[592]), srcAddr:=ADR(aLMP_PTM[41].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[41].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[594]), srcAddr:=ADR(aLMP_PTM[41].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[41].i_diMtrTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[596]), srcAddr:=ADR(aLMP_PTM[20].i_iCurSpd), n:=SIZEOF(aLMP_PTM[20].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[598]), srcAddr:=ADR(aLMP_PTM[20].i_diPwr), n:=SIZEOF(aLMP_PTM[20].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[600]), srcAddr:=ADR(aLMP_PTM[20].i_diElecTemp), n:=SIZEOF(aLMP_PTM[20].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[602]), srcAddr:=ADR(aLMP_PTM[20].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[20].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[604]), srcAddr:=ADR(aLMP_PTM[20].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[20].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[606]), srcAddr:=ADR(aLMP_PTM[20].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[20].i_diMtrTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[608]), srcAddr:=ADR(aLMP_PTM[21].i_iCurSpd), n:=SIZEOF(aLMP_PTM[21].i_iCurSpd));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[610]), srcAddr:=ADR(aLMP_PTM[21].i_diPwr), n:=SIZEOF(aLMP_PTM[21].i_diPwr));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[612]), srcAddr:=ADR(aLMP_PTM[21].i_diElecTemp), n:=SIZEOF(aLMP_PTM[21].i_diElecTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[614]), srcAddr:=ADR(aLMP_PTM[21].i_diBtmTemp), n:=SIZEOF(aLMP_PTM[21].i_diBtmTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[616]), srcAddr:=ADR(aLMP_PTM[21].i_diBrngTemp), n:=SIZEOF(aLMP_PTM[21].i_diBrngTemp));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[618]), srcAddr:=ADR(aLMP_PTM[21].i_diMtrTemp), n:=SIZEOF(aLMP_PTM[21].i_diMtrTemp));]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

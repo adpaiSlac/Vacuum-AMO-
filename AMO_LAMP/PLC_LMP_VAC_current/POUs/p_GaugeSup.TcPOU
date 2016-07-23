@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <POU Name="p_GaugeSup" Id="{4adcd38c-072c-4bc0-a499-dda30ca055d8}">
+    <Declaration><![CDATA[PROGRAM p_GaugeSup
+VAR
+(* Change the gauge types here, and that's all you have to do! *)
+
+	i	:	INT := 0;
+
+	LMP_GPI00	:	ST_VG; (* simulation pirani *)
+
+
+	fb_LMP_GPI_D1 : FB_Dumb_Gauge;
+
+	fb_LMP_VG : ARRAY[1..50] OF FB_GGO;
+	
+    fb_H2E_VG : FB_903;
+
+	catch: INT;
+    H2E_GPI00: ST_VG;
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Dummy pirani setup *)
+LMP_GPI00.xPRESS_OK := TRUE;
+
+fb_LMP_GPI_D1(iq_stPG:=LMP_GPI_D1, i_stPGA:= LMP_VG[20], i_stPGB:=LMP_VG[01], i_stVRCA:=LMP_VRC05, i_stVRCB:=LMP_VRC02);
+
+(* Control function blocks *)
+
+LMP_VG[50].rPRESS := 1E-3;
+LMP_VG[50].iTYPE := 4;
+LMP_VG[50].xPRESS_OK := TRUE;
+
+FOR i:=1 TO 50 DO
+fb_LMP_VG[i](i_iIndex:=i, iq_astGauges := LMP_VG, iq_axHV_RO:=LMP_RO);
+END_FOR;
+IF i >50 THEN i:=1; catch := catch +1; END_IF
+
+H2E_GPI00.rPRESS := 1E-3;
+H2E_GPI00.xPRESS_OK := TRUE;
+
+//fb_H2E_VG(IG:=H2E_VG01,PG:=H2E_GPI00);
+//fb_H2E_VG(IG:=H2E_VG02,PG:=H2E_GPI00);
+
+
+
+]]></ST>
+    </Implementation>
+    <ObjectProperties />
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="p_ValveSup" Id="{42ab95cb-5ff7-4295-8f7b-5f5ac92b9891}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM p_ValveSup
+VAR
+	fbLMP_VRC01	:	FB_VRC_LAMP;
+	fbLMP_VRC02	:	FB_VRC_LAMP;
+	fbLMP_VRC03	:	FB_VRC_LAMP;
+	fbLMP_VRC04	:	FB_VRC_OK_CLS;
+	fbLMP_VRC05	:	FB_VRC_LAMP;
+	fbLMP_VRC06	:	FB_VRC_LAMP;
+	fbLMP_VRC07	:	FB_VRC_LAMP;
+	fbLMP_VRC08	:	FB_VRC_LAMP;
+
+	fbLMP_VGC30 :   FB_VGC;
+	
+	fbLMP_VCCUSR :  FB_VCC;
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Interlock declarations *)
+
+g_stSystem:= LMP_Sys00;
+
+(* User valve *)
+LMP_VCCUSR.xOPN_OK := TRUE;
+
+LMP_VRC02.xOPN_OK := F_VRC_DIODE_ILK(i_stPGA:=LMP_VG[3], i_stPGB:=LMP_VG[1]);
+LMP_VRC01.xOPN_OK := LMP_VRC02.i_xOpnLS AND F_VRC_DIODE_ILK(i_stPGA:=LMP_VG[3], i_stPGB:=LMP_VG[1]);
+
+
+(* Interlock for VRC 06: If DET, IC and foreline piranis > 0.1 torr, DET and IC pressures must be within 
+ one order of magnitude *)
+
+(* May implement logic here at some point? *)
+LMP_VRC05.xOPN_OK := TRUE;
+
+LMP_VRC06.xOPN_OK := ( LMP_VG[20].rPRESS < 0.1 AND LMP_VG[3].rPRESS < 0.1 )
+	OR F_VALVE_REL_ILK(i_stUSG:=LMP_VG[3], i_stDSG:=LMP_VG[5], i_iOrdersMagnitude:=1);
+							
+LMP_VRC07.xOPN_OK := LMP_VG[2].rPRESS < 0.5;
+
+LMP_VRC03.xOPN_OK := F_VRC_DIODE_ILK (i_stPGA:=LMP_VG[4], i_stPGB:=LMP_VG[2]); //AND LMP_VRC04.i_xOpnLS (*commented b/c VRC04 has no readback*)
+
+(*The Following interlock only allow VRC04 to close if both GJ and IC chambers can be pumped down*)
+(* LMP_VRC01.i_xOpnLS AND LMP_VRC05.i_xOpnLS AND LMP_VRC07.i_xClsLS;
+LMP_VRC03.i_xOpnLS AND LMP_VG[20].xPRESS_OK; *Commented out because no VRC03 readback and no VG20 - 10/11 *)
+
+IF LMP_VG[4].rPRESS < 10 AND LMP_VG[6].rPRESS < 10 THEN
+LMP_VRC04.xOPN_OK := F_VALVE_REL_ILK(LMP_VG[4],LMP_VG[6],3);
+ELSIF LMP_VG[4].rPRESS < 100 AND LMP_VG[6].rPRESS < 100 THEN
+LMP_VRC04.xOPN_OK := F_VALVE_REL_ILK(LMP_VG[4],LMP_VG[6],2);
+ELSE LMP_VRC04.xOPN_OK := F_VALVE_REL_ILK(LMP_VG[4],LMP_VG[6],1);
+END_IF
+
+(* VRC *)
+fbLMP_VRC01(iq_stValve:=LMP_VRC01);
+fbLMP_VRC02(iq_stValve:=LMP_VRC02);
+fbLMP_VRC03(iq_stValve:=LMP_VRC03);
+fbLMP_VRC04(iq_stValve:=LMP_VRC04);
+fbLMP_VRC05(iq_stValve:=LMP_VRC05);
+fbLMP_VRC06(iq_stValve:=LMP_VRC06);
+fbLMP_VRC07(iq_stValve:=LMP_VRC07);
+
+(* VGC
+fbLMP_VGC30(iq_stValve:=LMP_VGC30, i_stUSG:=VG[21], i_stDSG:= VG[31]);
+*)
+
+(* VCC *)
+fbLMP_VCCUSR(iq_stValve:=LMP_VCCUSR);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

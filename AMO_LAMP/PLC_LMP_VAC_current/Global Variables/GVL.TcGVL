@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <GVL Name="GVL" Id="{07e27880-0087-4078-8b7f-dff3a2e73520}">
+    <Declaration><![CDATA[VAR_GLOBAL
+	(* User Memory Variables *)
+
+	LMP_Sys00	: System_Struct;
+	xLOTO: BOOL := TRUE;
+	g_rExtIlkPres: REAL; //User-specified pressure for ext. interlocking
+	g_iExtIlkGauge: INT; //User-specified gauge to interlock from
+	g_xExtIlkRO: BOOL := FALSE; //LAMP ext. interlock output
+	g_iActivePfeiffers : INT := 10;
+	
+	g_xPTMGroupRun: ARRAY [0..10] OF BOOL;
+	
+	(* Modbus TCP *)
+   	mb_Input_Coils       				: ARRAY [0..255] OF BOOL; 	(* test mb_Input_Coils[0] with "modpoll -r 32769 -t 1 127.0.0.1" *)
+    mb_Output_Coils      				: ARRAY [0..255] OF BOOL;	(* test mb_Output_Coils[0] with "modpoll -r 32769 -t 0 127.0.0.1" *)
+	mb_Input_Registers 				: ARRAY [0..255] OF WORD; 	(* test mb_Input_Registers[0] with "modpoll -r 32769 -t 3 127.0.0.1" *)
+	mb_Output_Registers 				: ARRAY [0..255] OF WORD; 	(* test mb_Output_Registers[0] with "modpoll -r 32769 -t 4 127.0.0.1" *)
+	mb_PLC_Memory 			AT %MW0 	: ARRAY [0..1000] OF WORD; 	(* test mb_PLC_Memory[0] with "modpoll -r 12289 -t 4 127.0.0.1" *)
+
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

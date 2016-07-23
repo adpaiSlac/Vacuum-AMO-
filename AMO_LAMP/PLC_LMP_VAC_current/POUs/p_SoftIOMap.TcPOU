@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="p_SoftIOMap" Id="{8180acf8-ee5b-43fd-9e9c-9bddefd8b66c}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM p_SoftIOMap
+VAR
+	
+	fbPfeifferToPTM : FB_PFEIFFER_TO_PTM;
+
+	Oerlikon_to_PTM44 : FB_OERLIKON_TO_PTM;
+	
+	iDummy	: REAL;
+	xDummy	: BOOL;
+	i       : INT;
+
+END_VAR
+VAR_INPUT
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Soft to Hard IO Tag Map *)
+(* Hard input tags are copied to Soft inputs tags, Soft output tags are copied to *)
+(* Hard input tags. Soft IO tags are used within the program and can be modified as needed. *)
+(* Added to this list to include dummy variables for the IO points so they wold be mapped to the correct task *)
+
+(* Mapping the PTM names to something more user friendly *)
+(* 6002 *)
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[1], iq_stPfeiffer_stat := g_astPfe_RBK[1], iq_stPTM := aLMP_PTM[10]);
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[2], iq_stPfeiffer_stat := g_astPfe_RBK[2], iq_stPTM := aLMP_PTM[11]);
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[3], iq_stPfeiffer_stat := g_astPfe_RBK[3], iq_stPTM := aLMP_PTM[30]);
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[4], iq_stPfeiffer_stat := g_astPfe_RBK[4], iq_stPTM := aLMP_PTM[31]);
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[5], iq_stPfeiffer_stat := g_astPfe_RBK[5], iq_stPTM := aLMP_PTM[32]);
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[6], iq_stPfeiffer_stat := g_astPfe_RBK[6], iq_stPTM := aLMP_PTM[33]);
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[7], iq_stPfeiffer_stat := g_astPfe_RBK[7], iq_stPTM := aLMP_PTM[20]);
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[8], iq_stPfeiffer_stat := g_astPfe_RBK[8], iq_stPTM := aLMP_PTM[21]);
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[9], iq_stPfeiffer_stat := g_astPfe_RBK[9], iq_stPTM := aLMP_PTM[40]);
+fbPfeifferToPTM(iq_stPfeiffer_ctrl:= g_astPfe_CTRL[10], iq_stPfeiffer_stat := g_astPfe_RBK[10], iq_stPTM := aLMP_PTM[41]);
+
+Oerlikon_to_PTM44(iq_stOerlikon_stat:=g_astTD20_RBK, iq_stPTM:= LMP_PTM44);
+
+(* Controls *)
+(* EP2339 *)
+	DiscIO_LRS_EB3Ch01:=LMP_VRC01.xOPN_DO;
+	DiscIO_LRS_EB3Ch04:=LMP_VRC02.xOPN_DO;
+	DiscIO_LRS_EB3Ch07:=LMP_VRC03.xOPN_DO;
+	DiscIO_LRS_EB3Ch10:=LMP_VRC04.xOPN_DO;
+	DiscIO_LRS_EB3Ch13:=LMP_VRC05.xOPN_DO;
+	DiscIO_LRS_EB4Ch01:=LMP_VRC06.xOPN_DO;
+	DiscIO_LRS_EB4Ch04:=LMP_VRC07.xOPN_DO;
+	//User valve
+	DiscIO_GJ_EB3Ch04:=LMP_VCCUSR.xOPN_DO;
+
+
+(* HV Enables *)
+(* EP2624 *)
+	RelayO_DET_EB3Ch01 := LMP_RO[30];
+	RelayO_DET_EB3Ch02 := LMP_RO[31];
+	RelayO_DET_EB3Ch03 := LMP_RO[32];
+	RelayO_DET_EB3Ch04 := LMP_RO[33];
+
+	RelayO_DET_EB5Ch01 := LMP_RO[34];
+	RelayO_DET_EB5Ch02 := LMP_RO[35];
+	RelayO_DET_EB5Ch03 := LMP_RO[36];
+	RelayO_DET_EB5Ch04 := LMP_RO[37];	
+	
+	
+	RelayO_IC_EB3Ch01 := LMP_RO[20];
+	RelayO_IC_EB3Ch02 := LMP_RO[21];
+	RelayO_IC_EB3Ch03 := LMP_RO[22];
+	RelayO_IC_EB3Ch04 := FALSE;
+		
+	RelayO_GJ_EB1Ch01 := LMP_RO[40];
+	RelayO_GJ_EB1Ch02 := LMP_RO[41];
+	RelayO_GJ_EB1Ch03 := LMP_RO[42];
+	RelayO_GJ_EB1Ch04 := LMP_RO[43];
+
+(* Readbacks *)
+
+(* PLC bus *)
+xDummy := DI_Term4_Ch1;
+
+(* Valves *)
+(* EP2339 *)
+	LMP_VGC30.i_xOpnLS:=DiscIO_DET_EB4Ch02;
+	LMP_VGC30.i_xClsLS:=DiscIO_DET_EB4Ch03;
+
+	LMP_VGC10.i_xOpnLS:=DiscIO_IC_EB4Ch14;
+	LMP_VGC10.i_xClsLS:=DiscIO_IC_EB4Ch15;
+	
+	LMP_VRC01.i_xOpnLS:=DiscIO_LRS_EB3Ch02;
+	LMP_VRC01.i_xClsLS:=DiscIO_LRS_EB3Ch03;
+	
+	LMP_VRC02.i_xOpnLS:=DiscIO_LRS_EB3Ch05;
+	LMP_VRC02.i_xClsLS:=DiscIO_LRS_EB3Ch06;
+	
+	LMP_VRC03.i_xOpnLS:=DiscIO_LRS_EB3Ch08;
+	LMP_VRC03.i_xClsLS:=DiscIO_LRS_EB3Ch09;
+	
+	LMP_VRC04.i_xOpnLS:=DiscIO_LRS_EB3Ch11;
+	LMP_VRC04.i_xClsLS:=DiscIO_LRS_EB3Ch12;
+	
+	LMP_VRC05.i_xOpnLS:=DiscIO_LRS_EB3Ch14;
+	LMP_VRC05.i_xClsLS:=DiscIO_LRS_EB3Ch15;
+	
+	LMP_VRC06.i_xOpnLS:=DiscIO_LRS_EB4Ch02;
+	LMP_VRC06.i_xClsLS:=DiscIO_LRS_EB4Ch03;
+	
+	LMP_VRC07.i_xOpnLS:=DiscIO_LRS_EB4Ch05;
+	LMP_VRC07.i_xClsLS:=DiscIO_LRS_EB4Ch06;
+	
+	
+(*	H2E_VGC01.i_xOpnLS:=DiscIO_DET_EB1Ch05;
+	H2E_VGC01.i_xClsLS:=DiscIO_DET_EB1Ch06;
+	
+	H2E_VGC02.i_xOpnLS:=DiscIO_H2E_EB1Ch02;
+	H2E_VGC02.i_xClsLS:=DiscIO_H2E_EB1Ch03; *)
+
+	
+(* Gauges *)
+
+(* Interaction Chamber *)
+(* EP3174 *)
+	LMP_VG[20].iPRESS_R := AI_IC_EB2Ch01;
+	LMP_VG[21].iPRESS_R := AI_IC_EB2Ch02;
+	LMP_VG[22].iPRESS_R := AI_IC_EB2Ch03;
+	LMP_VG[23].iPRESS_R := AI_IC_EB2Ch04;
+(* Roughing lines *)
+(* EP3174 *)
+	LMP_VG[01].iPRESS_R := AI_LRS_EB1Ch01;
+	LMP_VG[02].iPRESS_R := AI_LRS_EB1Ch02;
+	LMP_VG[03].iPRESS_R := AI_LRS_EB1Ch03;
+	LMP_VG[04].iPRESS_R := AI_LRS_EB1Ch04;
+	LMP_VG[05].iPRESS_R := AI_LRS_EB2Ch01;
+	LMP_VG[06].iPRESS_R := AI_LRS_EB2Ch02;
+	LMP_VG[07].iPRESS_R := AI_LRS_EB2Ch03;
+	LMP_VG[08].iPRESS_R := AI_LRS_EB2Ch04;
+
+
+(* Detector chamber *)
+(* EP3174 *)
+	LMP_VG[30].iPRESS_R := AI_DET_EB2Ch01;
+	LMP_VG[31].iPRESS_R := AI_DET_EB2Ch02;
+	LMP_VG[32].iPRESS_R := AI_DET_EB2Ch03;
+	LMP_VG[33].iPRESS_R := AI_DET_EB2Ch04;
+
+(* Gas Jet *)
+(* EP3174 *)
+	LMP_VG[40].iPRESS_R := AI_GJ_EB2Ch01;
+	LMP_VG[41].iPRESS_R := AI_GJ_EB2Ch02;
+	LMP_VG[42].iPRESS_R := AI_GJ_EB2Ch03;
+	LMP_VG[43].iPRESS_R := AI_GJ_EB2Ch04;
+
+(* H2E *)
+//	H2E_VG01.iPRESS_R := AI_H2E_EB2Ch01; 
+//	H2E_VG02.iPRESS_R := AI_H2E_EB2Ch02;
+
+(* Encoders & SXD PS permissive *)
+(* EP2624 *)
+RelayO_DET_EB5Ch01 := LMP_ENC01.xENC_PWR;
+RelayO_DET_EB5Ch02 := LMP_ENC02.xENC_PWR;
+RelayO_DET_EB5Ch03 := LMP_ENC03.xENC_PWR;
+RelayO_DET_EB5Ch04 := g_xExtIlkRO;
+
+(* EtherCAT Slave interface *)
+(* MPS Outputs to Main PLC *)
+LAMP_MPS_1 := LMP_VGC10.i_xOpnLS;
+LAMP_MPS_2 := LMP_VGC30.i_xOpnLS;
+LAMP_MPS_3 := LMP_VGC30.i_xClsLS;
+LAMP_MPS_4 := H2E_VGC01.i_xOpnLS AND H2E_VGC02.i_xOpnLS ;
+LAMP_MPS_5 := FALSE;
+LAMP_MPS_6 := FALSE;
+LAMP_MPS_7 := FALSE;
+LAMP_MPS_8 := FALSE;
+
+
+(* LAMP Up/Downstream Vars *)
+LAMP_BCO_1 := LMP_VG[50].xPRESS_OK; // Pressure valid boolean
+LAMP_BCO_2 := LMP_VG[21].xPRESS_OK; // Pressure valid boolean
+LAMP_BCO_3 := LMP_VG[21].xAT_VAC;
+LAMP_BCO_4 := FALSE;
+LAMP_BCO_5 := FALSE;
+LAMP_BCO_6 := FALSE;
+LAMP_BCO_7 := FALSE;
+LAMP_BCO_8 := FALSE;
+
+xDummy := LAMP_BRB_1; 
+xDummy := LAMP_BRB_2;
+xDummy := LAMP_BRB_3;
+xDummy := LAMP_BRB_4;
+xDummy := LAMP_BRB_5;
+xDummy := LAMP_BRB_6;
+xDummy := LAMP_BRB_7;
+xDummy := LAMP_BRB_8;
+
+q_rLampAuxVG1 	:= LMP_VG[50].rPRESS;
+q_rLampAuxVG2	:= LMP_VG[21].rPRESS;
+q_rLampAuxVG3	:= LMP_VG[10].rPRESS;
+q_rLampAuxVG4	:= LMP_VG[10].rPRESS;
+
+iDummy := i_rAuxVG1;
+iDummy := i_rAuxVG2;
+iDummy := i_rAuxVG3;
+iDummy := i_rAuxVG4;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

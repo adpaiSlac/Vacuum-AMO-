@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="Ext_Interlocks" Id="{b9c2a7a4-1f49-4997-80e7-825c78ef3dab}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM Ext_Interlocks
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF g_iExtIlkGauge < (SIZEOF(LMP_VG) / SIZEOF(ST_VG)) THEN //Is this a valid gauge number?
+    IF g_rExtIlkPres >= LMP_VG[g_iExtIlkGauge].rPRESS AND LMP_VG[g_iExtIlkGauge].xPRESS_OK THEN
+		g_xExtIlkRO:= TRUE;
+	ELSE
+		g_xExtIlkRO:= FALSE;
+	END_IF
+ELSE //No? Then FALSE!
+	g_xExtIlkRO := FALSE;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

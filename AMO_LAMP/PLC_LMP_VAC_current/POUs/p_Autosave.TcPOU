@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <POU Name="p_Autosave" Id="{2d7dd9ca-57e1-4915-aaaa-e34f631a489e}">
+    <Declaration><![CDATA[PROGRAM p_Autosave
+VAR
+	iIndex: INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* If first pass, copy all persistent variables (which should be intialized to old values) back into the operational variables *)
+IF LMP_SYS00.xFirstScan THEN
+	FOR iIndex:=0 TO 50 DO
+		LMP_VG[iIndex].iTYPE := gp_LMP_VG[iIndex].iTYPE;
+		LMP_VG[iIndex].rFULL_SCALE := gp_LMP_VG[iIndex].rFULL_SCALE;
+		LMP_VG[iIndex].rPRO_SP := gp_LMP_VG[iIndex].rPRO_SP;
+		LMP_VG[iIndex].rVAC_SP := gp_LMP_VG[iIndex].rVAC_SP;
+		LMP_VG[iIndex].wHV_RO := gp_LMP_VG[iIndex].wHV_RO;
+		LMP_VG[iIndex].wPG := gp_LMP_VG[iIndex].wPG;
+	END_FOR
+ELSE
+	FOR iIndex:=0 TO 50 DO
+		gp_LMP_VG[iIndex].iTYPE			:=	LMP_VG[iIndex].iTYPE;
+		gp_LMP_VG[iIndex].rFULL_SCALE	:=	LMP_VG[iIndex].rFULL_SCALE;
+		gp_LMP_VG[iIndex].rPRO_SP		:=	LMP_VG[iIndex].rPRO_SP;
+		gp_LMP_VG[iIndex].rVAC_SP		:=	LMP_VG[iIndex].rVAC_SP;
+		gp_LMP_VG[iIndex].wHV_RO		:=	LMP_VG[iIndex].wHV_RO;
+		gp_LMP_VG[iIndex].wPG			:=	LMP_VG[iIndex].wPG;
+	END_FOR
+END_IF
+
+]]></ST>
+    </Implementation>
+    <ObjectProperties />
+  </POU>
+</TcPlcObject>

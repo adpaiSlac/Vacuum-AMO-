@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.24">
+  <GVL Name="GVL_COM_Buffers" Id="{a8441f26-f9f8-4fbc-842d-41b6657e3ba7}">
+    <Declaration><![CDATA[VAR_GLOBAL
+	
+	DET_P1_SerialRXBuffer : ComBuffer;
+	DET_P1_SerialTXBuffer : ComBuffer;
+	
+	DET_P2_SerialRXBuffer : ComBuffer;
+	DET_P2_SerialTXBuffer : ComBuffer;
+
+	IC_P1_SerialRXBuffer : ComBuffer;
+	IC_P1_SerialTXBuffer : ComBuffer;
+
+	IC_P2_SerialRXBuffer : ComBuffer;
+	IC_P2_SerialTXBuffer : ComBuffer;
+
+	R10_A_P1_SerialRXBuffer : ComBuffer;
+	R10_A_P1_SerialTXBuffer : ComBuffer;
+	
+	R10_A_P2_SerialRXBuffer : ComBuffer;
+	R10_A_P2_SerialTXBuffer : ComBuffer;
+	
+	R10_B_P1_SerialRXBuffer : ComBuffer;
+	R10_B_P1_SerialTXBuffer : ComBuffer;
+	
+	R10_B_P2_SerialRXBuffer : ComBuffer;
+	R10_B_P2_SerialTXBuffer : ComBuffer;
+	
+END_VAR]]></Declaration>
+    <ObjectProperties />
+  </GVL>
+</TcPlcObject>

@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <GVL Name="GVL_IO" Id="{3dea6b42-adc6-4095-8932-a48a3fb36db7}">
+    <Declaration><![CDATA[VAR_GLOBAL
+	
+(* Hardware Input/Output Declaration *)
+(* Hardware Inputs & Outputs are mapped to 'Soft' IO tags in the list below. *)
+(* There should be one matching IO tag for each physical IO in System Manager. *)
+(* IMPORTANT - This list should change only  if physical IO modules are added or removed *)
+(* from the PLC. Otherwise, this map and linking should never change. *)
+
+	AI_Term2_Ch1 AT %I* : INT;
+	AI_Term2_Ch2 AT %I* : INT;
+	AI_Term2_Ch3 AT %I* : INT;
+	AI_Term2_Ch4 AT %I* : INT;
+
+	AI_Term3_Ch1 AT %I* : INT;
+	AI_Term3_Ch2 AT %I* : INT;
+	AI_Term3_Ch3 AT %I* : INT;
+	AI_Term3_Ch4 AT %I* : INT;
+
+	DI_Term4_Ch1 AT %I* : BOOL;
+	DI_Term4_Ch2 AT %I* : BOOL;
+	DI_Term4_Ch3 AT %I* : BOOL;
+	DI_Term4_Ch4 AT %I* : BOOL;
+	DI_Term4_Ch5 AT %I* : BOOL;
+	DI_Term4_Ch6 AT %I* : BOOL;
+	DI_Term4_Ch7 AT %I* : BOOL;
+	DI_Term4_Ch8 AT %I* : BOOL;
+
+	DO_Term5_Ch1 AT %Q* : BOOL;
+	DO_Term5_Ch2 AT %Q* : BOOL;
+	DO_Term5_Ch3 AT %Q* : BOOL;
+	DO_Term5_Ch4 AT %Q* : BOOL;
+	DO_Term5_Ch5 AT %Q* : BOOL;
+	DO_Term5_Ch6 AT %Q* : BOOL;
+	DO_Term5_Ch7 AT %Q* : BOOL;
+	DO_Term5_Ch8 AT %Q* : BOOL;
+	
+	DO_Term6_Ch1 AT %Q* : BOOL;
+	DO_Term6_Ch2 AT %Q* : BOOL;
+	DO_Term6_Ch3 AT %Q* : BOOL;
+	DO_Term6_Ch4 AT %Q* : BOOL;
+	DO_Term6_Ch5 AT %Q* : BOOL;
+	DO_Term6_Ch6 AT %Q* : BOOL;
+	DO_Term6_Ch7 AT %Q* : BOOL;
+	DO_Term6_Ch8 AT %Q* : BOOL;	
+	
+	(* Fieldbus PLC IO *)
+	
+(* IC interfaace *)
+	
+	(*EP3174 *)
+	AI_IC_EB2Ch01 AT %I* : INT;
+	AI_IC_EB2Ch02 AT %I* : INT;
+	AI_IC_EB2Ch03 AT %I* : INT;
+	AI_IC_EB2Ch04 AT %I* : INT;
+	
+	(*EP2624*)
+	RelayO_IC_EB3Ch01 AT %Q* : BOOL;
+	RelayO_IC_EB3Ch02 AT %Q* : BOOL;
+	RelayO_IC_EB3Ch03 AT %Q* : BOOL;
+	RelayO_IC_EB3Ch04 AT %Q* : BOOL;
+	
+	
+	(*EP2339*)
+	DiscIO_IC_EB4Ch01 AT %Q* : BOOL; (* note, these channels can be configured as input or output*)
+	DiscIO_IC_EB4Ch02 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch03 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch04 AT %Q* : BOOL;
+	DiscIO_IC_EB4Ch05 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch06 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch07 AT %Q* : BOOL;
+	DiscIO_IC_EB4Ch08 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch09 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch10 AT %Q* : BOOL;
+	DiscIO_IC_EB4Ch11 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch12 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch13 AT %Q* : BOOL;
+	DiscIO_IC_EB4Ch14 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch15 AT %I* : BOOL;
+	DiscIO_IC_EB4Ch16 AT %I* : BOOL;
+	
+(* DET interfaace *)
+	
+	(*EP3174 *)
+	AI_DET_EB2Ch01 AT %I* : INT;
+	AI_DET_EB2Ch02 AT %I* : INT;
+	AI_DET_EB2Ch03 AT %I* : INT;
+	AI_DET_EB2Ch04 AT %I* : INT;
+	
+	(*EP2624*)
+	RelayO_DET_EB3Ch01 AT %Q* : BOOL;
+	RelayO_DET_EB3Ch02 AT %Q* : BOOL;
+	RelayO_DET_EB3Ch03 AT %Q* : BOOL;
+	RelayO_DET_EB3Ch04 AT %Q* : BOOL;
+	
+	(*EP2339*)
+	DiscIO_DET_EB4Ch01 AT %Q* : BOOL; (* note, these channels can be configured as input or output*)
+	DiscIO_DET_EB4Ch02 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch03 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch04 AT %Q* : BOOL;
+	DiscIO_DET_EB4Ch05 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch06 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch07 AT %Q* : BOOL;
+	DiscIO_DET_EB4Ch08 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch09 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch10 AT %Q* : BOOL;
+	DiscIO_DET_EB4Ch11 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch12 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch13 AT %Q* : BOOL;
+	DiscIO_DET_EB4Ch14 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch15 AT %I* : BOOL;
+	DiscIO_DET_EB4Ch16 AT %I* : BOOL;	
+	
+	(*EP2624*)
+	RelayO_DET_EB5Ch01 AT %Q* : BOOL;
+	RelayO_DET_EB5Ch02 AT %Q* : BOOL;
+	RelayO_DET_EB5Ch03 AT %Q* : BOOL;
+	RelayO_DET_EB5Ch04 AT %Q* : BOOL;	
+	
+	(*EP3174 *)
+	AI_DET_EB6Ch01 AT %I* : INT;
+	AI_DET_EB6Ch02 AT %I* : INT;
+	AI_DET_EB6Ch03 AT %I* : INT;
+	AI_DET_EB6Ch04 AT %I* : INT;
+	
+
+(* GJ interfaace *)
+
+	(*EP2624*)
+	RelayO_GJ_EB1Ch01 AT %Q* : BOOL;
+	RelayO_GJ_EB1Ch02 AT %Q* : BOOL;
+	RelayO_GJ_EB1Ch03 AT %Q* : BOOL;
+	RelayO_GJ_EB1Ch04 AT %Q* : BOOL;
+	
+	(*EP3174 *)
+	AI_GJ_EB2Ch01 AT %I* : INT;
+	AI_GJ_EB2Ch02 AT %I* : INT;
+	AI_GJ_EB2Ch03 AT %I* : INT;
+	AI_GJ_EB2Ch04 AT %I* : INT;
+	
+	(*EP2339*)
+	DiscIO_GJ_EB3Ch01 AT %Q* : BOOL; (* note, these channels can be configured as input or output*)
+	DiscIO_GJ_EB3Ch02 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch03 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch04 AT %Q* : BOOL;
+	DiscIO_GJ_EB3Ch05 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch06 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch07 AT %Q* : BOOL;
+	DiscIO_GJ_EB3Ch08 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch09 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch10 AT %Q* : BOOL;
+	DiscIO_GJ_EB3Ch11 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch12 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch13 AT %Q* : BOOL;
+	DiscIO_GJ_EB3Ch14 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch15 AT %I* : BOOL;
+	DiscIO_GJ_EB3Ch16 AT %I* : BOOL;
+	
+	(*EP3174 *)
+	AI_GJ_EB4Ch01 AT %I* : INT;
+	AI_GJ_EB4Ch02 AT %I* : INT;
+	AI_GJ_EB4Ch03 AT %I* : INT;
+	AI_GJ_EB4Ch04 AT %I* : INT;
+	
+	
+(*  LRS interface  *)
+	
+	(*EP3174 *)
+	AI_LRS_EB1Ch01 AT %I* : INT;
+	AI_LRS_EB1Ch02 AT %I* : INT;
+	AI_LRS_EB1Ch03 AT %I* : INT;
+	AI_LRS_EB1Ch04 AT %I* : INT;
+	
+	(*EP3174 *)
+	AI_LRS_EB2Ch01 AT %I* : INT;
+	AI_LRS_EB2Ch02 AT %I* : INT;
+	AI_LRS_EB2Ch03 AT %I* : INT;
+	AI_LRS_EB2Ch04 AT %I* : INT;
+	
+	(*EP2339*)	
+	DiscIO_LRS_EB3Ch01 AT %Q* : BOOL;(* note, these channels can be configured as input or output*)
+	DiscIO_LRS_EB3Ch02 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch03 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch04 AT %Q* : BOOL;
+	DiscIO_LRS_EB3Ch05 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch06 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch07 AT %Q* : BOOL;
+	DiscIO_LRS_EB3Ch08 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch09 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch10 AT %Q* : BOOL;
+	DiscIO_LRS_EB3Ch11 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch12 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch13 AT %Q* : BOOL;
+	DiscIO_LRS_EB3Ch14 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch15 AT %I* : BOOL;
+	DiscIO_LRS_EB3Ch16 AT %I* : BOOL;
+	
+	(*EP2339*)
+	DiscIO_LRS_EB4Ch01 AT %Q* : BOOL;(* note, these channels can be configured as input or output*)
+	DiscIO_LRS_EB4Ch02 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch03 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch04 AT %Q* : BOOL;
+	DiscIO_LRS_EB4Ch05 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch06 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch07 AT %Q* : BOOL;
+	DiscIO_LRS_EB4Ch08 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch09 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch10 AT %Q* : BOOL;
+	DiscIO_LRS_EB4Ch11 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch12 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch13 AT %Q* : BOOL;
+	DiscIO_LRS_EB4Ch14 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch15 AT %I* : BOOL;
+	DiscIO_LRS_EB4Ch16 AT %I* : BOOL;
+	
+(* H2E interfaace *)	
+
+	(*EP2339*)
+	DiscIO_H2E_EB1Ch01 AT %Q* : BOOL; (* note, these channels can be configured as input or output*)
+	DiscIO_H2E_EB1Ch02 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch03 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch04 AT %Q* : BOOL;
+	DiscIO_H2E_EB1Ch05 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch06 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch07 AT %Q* : BOOL;
+	DiscIO_H2E_EB1Ch08 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch09 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch10 AT %Q* : BOOL;
+	DiscIO_H2E_EB1Ch11 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch12 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch13 AT %Q* : BOOL;
+	DiscIO_H2E_EB1Ch14 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch15 AT %I* : BOOL;
+	DiscIO_H2E_EB1Ch16 AT %I* : BOOL;	
+	
+	(*EP3174 *)
+	AI_H2E_EB2Ch01 AT %I* : INT;
+	AI_H2E_EB2Ch02 AT %I* : INT;
+	AI_H2E_EB2Ch03 AT %I* : INT;
+	AI_H2E_EB2Ch04 AT %I* : INT;
+
+(* MPS Outputs to another PLC (ECAT slave interface) *)
+	LAMP_MPS_1 AT %Q*	:	BOOL;
+	LAMP_MPS_2 AT %Q*	:	BOOL;
+	LAMP_MPS_3 AT %Q*	:	BOOL;
+	LAMP_MPS_4 AT %Q*	:	BOOL;
+	LAMP_MPS_5 AT %Q*	:	BOOL;
+	LAMP_MPS_6 AT %Q*	:	BOOL;
+	LAMP_MPS_7 AT %Q*	:	BOOL;
+	LAMP_MPS_8 AT %Q*	:	BOOL;
+
+(* Misc Outputs to another PLC (ECAT slave interface) *)
+
+	LAMP_BCO_1 AT %Q*	:	BOOL;
+	LAMP_BCO_2 AT %Q*	:	BOOL;
+	LAMP_BCO_3 AT %Q*	:	BOOL;
+	LAMP_BCO_4 AT %Q*	:	BOOL;
+	LAMP_BCO_5 AT %Q*	:	BOOL;
+	LAMP_BCO_6 AT %Q*	:	BOOL;
+	LAMP_BCO_7 AT %Q*	:	BOOL;
+	LAMP_BCO_8 AT %Q*	:	BOOL;
+
+	q_rLampAuxVG1 AT %Q*	:	REAL;
+	q_rLampAuxVG2 AT %Q*	:	REAL;
+	q_rLampAuxVG3 AT %Q*	:	REAL;
+	q_rLampAuxVG4 AT %Q*	:	REAL;
+
+(* Misc Inputs from another PLC (ECAT slave interfaace) *)
+
+	LAMP_BRB_1 AT %I*	:	BOOL;
+	LAMP_BRB_2 AT %I*	:	BOOL;
+	LAMP_BRB_3 AT %I*	:	BOOL;
+	LAMP_BRB_4 AT %I*	:	BOOL;
+	LAMP_BRB_5 AT %I*	:	BOOL;
+	LAMP_BRB_6 AT %I*	:	BOOL;
+	LAMP_BRB_7 AT %I*	:	BOOL;
+	LAMP_BRB_8 AT %I*	:	BOOL;
+
+	i_rAuxVG1 AT %I*	:	REAL;
+	i_rAuxVG2 AT %I*	:	REAL;
+	i_rAuxVG3 AT %I*	:	REAL;
+	i_rAuxVG4 AT %I*	:	REAL;
+	
+
+END_VAR]]></Declaration>
+    <ObjectProperties />
+  </GVL>
+</TcPlcObject>

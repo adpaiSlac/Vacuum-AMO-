@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="p_PTMSup" Id="{79c55970-0813-426a-b0af-bfeb2f591189}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM p_PTMSup
+VAR
+	xRESET          :   BOOL := FALSE;
+	fb_LMP_PTM		:	FB_PFEIFFER_PTM;
+
+	DP_PTM_ILK : TOF;
+	IC_PTM_ILK : TOF;
+	DET_PTM_ILK : TOF;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Simplified interlocks to *only* be based on foreline press - 6/2016
+
+(* DP Pump Interlocks *)
+DP_PTM_ILK.PT := T#15S;
+DP_PTM_ILK.IN := LMP_VG[6].xAT_VAC;
+DP_PTM_ILK();
+aLMP_PTM[10].xExtRunOk := DP_PTM_ILK.Q;
+aLMP_PTM[11].xExtRunOk := aLMP_PTM[10].xExtRunOk;
+
+(* IC Pump interlocks *)
+IC_PTM_ILK.PT := T#15s;
+IC_PTM_ILK.IN := LMP_VG[6].xAT_VAC OR LMP_VG[3].xAT_VAC;
+IC_PTM_ILK();
+
+aLMP_PTM[40].xExtRunOk := IC_PTM_ILK.Q;
+aLMP_PTM[41].xExtRunOk := aLMP_PTM[40].xExtRunOk;
+aLMP_PTM[20].xExtRunOk := aLMP_PTM[40].xExtRunOk;
+aLMP_PTM[21].xExtRunOk := aLMP_PTM[40].xExtRunOk;
+
+(* Detector Pumps *)
+DET_PTM_ILK.PT := T#15s;
+DET_PTM_ILK.IN := LMP_VG[5].xAT_VAC;
+DET_PTM_ILK();
+
+aLMP_PTM[30].xExtRunOk	:=	DET_PTM_ILK.Q;
+aLMP_PTM[31].xExtRunOk	:=	aLMP_PTM[30].xExtRunOk;
+aLMP_PTM[32].xExtRunOk	:=	aLMP_PTM[30].xExtRunOk;
+aLMP_PTM[33].xExtRunOk	:=	aLMP_PTM[30].xExtRunOk;
+
+(* Control function blocks *)
+(*Differential pumping section *)
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[10]);
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[11]);
+
+(* Interaction Chamber *)
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[20]);
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[21]);
+
+(* Detector Chamber *)
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[30]);
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[31]);
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[32]);
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[33]);
+(* pnCCD Chamber *)
+
+(* Gas Jet *)
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[40]);
+fb_LMP_PTM(iq_stPTM:= aLMP_PTM[41]);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

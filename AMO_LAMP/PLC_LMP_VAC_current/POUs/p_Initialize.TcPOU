@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="p_Initialize" Id="{b5e5dd5b-da2b-41d7-9b3b-8bbfa5bbd61c}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM p_Initialize
+VAR
+
+	catch: INT;
+	xFirstScan: BOOL := TRUE;
+	counter : INT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF xFirstScan THEN
+xFirstScan := FALSE;
+
+(* Pfeiffers *)
+FOR counter := 1 TO g_iActivePfeiffers DO
+	g_astPfe_CTRL[counter].iSerialAddress := counter;
+	g_astPfe_CTRL[counter].xEnableComm := TRUE;
+END_FOR
+
+	aLMP_PTM[10].iPumpGrp	:= 0;
+	aLMP_PTM[10].xActive 	:= 1;	
+	aLMP_PTM[11].iPumpGrp	:= 1;
+	aLMP_PTM[11].xActive	:= 1;
+	aLMP_PTM[20].iPumpGrp	:= 2;
+	aLMP_PTM[20].xActive	:= 1;
+	aLMP_PTM[21].iPumpGrp	:= 2;
+	aLMP_PTM[21].xActive	:= 1;
+	aLMP_PTM[30].iPumpGrp	:= 3;
+	aLMP_PTM[30].xActive	:= 1;
+	aLMP_PTM[31].iPumpGrp	:= 3;
+	aLMP_PTM[31].xActive	:= 1;
+	aLMP_PTM[32].iPumpGrp	:= 3;
+	aLMP_PTM[32].xActive	:= 1;
+	aLMP_PTM[33].iPumpGrp	:= 3;
+	aLMP_PTM[33].xActive	:= 1;
+	aLMP_PTM[40].iPumpGrp	:= 4;
+	aLMP_PTM[40].xActive	:= 1;
+	aLMP_PTM[41].iPumpGrp	:= 4;
+	aLMP_PTM[41].xActive	:= 1;
+	LMP_PTM44.xActive 	:= 1;
+	LMP_PTM44.iPumpGrp	:= 4;
+
+
+END_IF
+
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

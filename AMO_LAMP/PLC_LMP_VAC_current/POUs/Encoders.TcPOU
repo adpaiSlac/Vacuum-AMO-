@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.24">
+  <POU Name="Encoders" Id="{e01714f1-bfa5-424b-a19e-1614c9813dba}">
+    <Declaration><![CDATA[PROGRAM Encoders
+VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[LMP_ENC01.xENC_PWR := LMP_ENC01.xENC_PWR_SW;
+LMP_ENC02.xENC_PWR := LMP_ENC02.xENC_PWR_SW;
+LMP_ENC03.xENC_PWR := LMP_ENC03.xENC_PWR_SW;]]></ST>
+    </Implementation>
+    <ObjectProperties />
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="p_ModbusMapRx" Id="{80dfda43-fe54-48ca-b09e-5b84927b73d4}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM p_ModbusMapRx
+VAR
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* Modbus map Rx *)
+(* This goes on the PLC *)
+
+(* To prevent misalignment when changing the modbus map, the LOTO bit should be set true
+to prevent EPICS from changing these bits in the PLC *)
+
+xLOTO := mb_Output_Coils[0];
+LMP_Sys00.xOverrideMode := mb_Output_Coils[1];
+
+//Removed pnCCD encoders from LOTO
+LMP_ENC01.xENC_PWR_SW:=mb_Output_Coils[200];
+LMP_ENC02.xENC_PWR_SW:=mb_Output_Coils[201];
+LMP_ENC03.xENC_PWR_SW:=mb_Output_Coils[202];
+
+IF xLOTO THEN
+
+(* Binary controls from PLC TO EPICS *)
+
+mb_Output_Coils[100]:=aLMP_PTM[10].i_xRunSW;
+mb_Output_Coils[101]:=aLMP_PTM[11].i_xRunSW;
+mb_Output_Coils[102]:=aLMP_PTM[30].i_xRunSW;
+mb_Output_Coils[103]:=aLMP_PTM[31].i_xRunSW;
+mb_Output_Coils[104]:=aLMP_PTM[32].i_xRunSW;
+mb_Output_Coils[105]:=aLMP_PTM[33].i_xRunSW;
+mb_Output_Coils[106]:=aLMP_PTM[40].i_xRunSW;
+mb_Output_Coils[107]:=LMP_PTM44.i_xRunSW;
+mb_Output_Coils[108]:=aLMP_PTM[41].i_xRunSW;
+mb_Output_Coils[109]:=aLMP_PTM[20].i_xRunSW;
+mb_Output_Coils[110]:=aLMP_PTM[21].i_xRunSW;
+mb_Output_Coils[150]:=LMP_VG[10].xHV_SW;
+mb_Output_Coils[151]:=LMP_VG[12].xHV_SW;
+mb_Output_Coils[152]:=LMP_VG[22].xHV_SW;
+mb_Output_Coils[153]:=LMP_VG[31].xHV_SW;
+mb_Output_Coils[154]:=LMP_VG[13].xHV_SW;
+mb_Output_Coils[155]:=LMP_VG[11].xHV_SW;
+mb_Output_Coils[156]:=LMP_VG[20].xHV_SW;
+mb_Output_Coils[157]:=LMP_VG[30].xHV_SW;
+mb_Output_Coils[158]:=LMP_VG[43].xHV_SW;
+mb_Output_Coils[159]:=LMP_VG[42].xHV_SW;
+mb_Output_Coils[160]:=LMP_VG[01].xHV_SW;
+mb_Output_Coils[161]:=LMP_VG[02].xHV_SW;
+mb_Output_Coils[162]:=LMP_VG[41].xHV_SW;
+mb_Output_Coils[163]:=LMP_VG[40].xHV_SW;
+mb_Output_Coils[164]:=LMP_VG[21].xHV_SW;
+mb_Output_Coils[165]:=LMP_VG[03].xHV_SW;
+mb_Output_Coils[166]:=LMP_VG[04].xHV_SW;
+mb_Output_Coils[167]:=LMP_VG[05].xHV_SW;
+
+mb_Output_Coils[10]:=LMP_VGC30.xOPN_SW;
+mb_Output_Coils[11]:=LMP_VGC10.xOPN_SW;
+mb_Output_Coils[12]:=LMP_VRC04.xOPN_SW;
+mb_Output_Coils[13]:=LMP_VRC03.xOPN_SW;
+mb_Output_Coils[14]:=LMP_VRC01.xOPN_SW;
+mb_Output_Coils[15]:=LMP_VRC02.xOPN_SW;
+mb_Output_Coils[16]:=LMP_VRC05.xOPN_SW;
+mb_Output_Coils[17]:=LMP_VRC06.xOPN_SW;
+mb_Output_Coils[18]:=LMP_VRC07.xOPN_SW;
+mb_Output_Coils[60]:=LMP_VCCUSR.xOPN_SW;
+
+mb_Output_Coils[50]:=LMP_VRC01.xOvrdOpn;
+mb_Output_Coils[51]:=LMP_VRC02.xOvrdOpn;
+mb_Output_Coils[52]:=LMP_VRC03.xOvrdOpn;
+//mb_Output_Coils[53]:=LMP_VRC04.xOvrdOpn;
+mb_Output_Coils[54]:=LMP_VRC05.xOvrdOpn;
+mb_Output_Coils[55]:=LMP_VRC06.xOvrdOpn;
+mb_Output_Coils[56]:=LMP_VRC07.xOvrdOpn;
+
+
+
+(* Real controls from PLC back to EPICS (32-bit) *)
+
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[100]), srcAddr:=ADR(LMP_VG[10].rVAC_SP), n:=SIZEOF(LMP_VG[10].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[102]), srcAddr:=ADR(LMP_VG[12].rVAC_SP), n:=SIZEOF(LMP_VG[12].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[104]), srcAddr:=ADR(LMP_VG[22].rVAC_SP), n:=SIZEOF(LMP_VG[22].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[106]), srcAddr:=ADR(LMP_VG[31].rVAC_SP), n:=SIZEOF(LMP_VG[31].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[108]), srcAddr:=ADR(LMP_VG[13].rVAC_SP), n:=SIZEOF(LMP_VG[13].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[110]), srcAddr:=ADR(LMP_VG[11].rVAC_SP), n:=SIZEOF(LMP_VG[11].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[112]), srcAddr:=ADR(LMP_VG[20].rVAC_SP), n:=SIZEOF(LMP_VG[20].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[114]), srcAddr:=ADR(LMP_VG[30].rVAC_SP), n:=SIZEOF(LMP_VG[30].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[116]), srcAddr:=ADR(LMP_VG[43].rVAC_SP), n:=SIZEOF(LMP_VG[43].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[118]), srcAddr:=ADR(LMP_VG[42].rVAC_SP), n:=SIZEOF(LMP_VG[42].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[120]), srcAddr:=ADR(LMP_VG[01].rVAC_SP), n:=SIZEOF(LMP_VG[01].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[122]), srcAddr:=ADR(LMP_VG[02].rVAC_SP), n:=SIZEOF(LMP_VG[02].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[124]), srcAddr:=ADR(LMP_VG[41].rVAC_SP), n:=SIZEOF(LMP_VG[41].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[126]), srcAddr:=ADR(LMP_VG[40].rVAC_SP), n:=SIZEOF(LMP_VG[40].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[128]), srcAddr:=ADR(LMP_VG[21].rVAC_SP), n:=SIZEOF(LMP_VG[21].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[130]), srcAddr:=ADR(LMP_VG[03].rVAC_SP), n:=SIZEOF(LMP_VG[03].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[132]), srcAddr:=ADR(LMP_VG[04].rVAC_SP), n:=SIZEOF(LMP_VG[04].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[134]), srcAddr:=ADR(LMP_VG[05].rVAC_SP), n:=SIZEOF(LMP_VG[05].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[136]), srcAddr:=ADR(LMP_VG[06].rVAC_SP), n:=SIZEOF(LMP_VG[06].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[138]), srcAddr:=ADR(LMP_VG[07].rVAC_SP), n:=SIZEOF(LMP_VG[07].rVAC_SP));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[140]), srcAddr:=ADR(g_rExtIlkPres), n:=SIZEOF(g_rExtIlkPres));
+MEMCPY(destAddr:=ADR(mb_PLC_Memory[142]), srcAddr:=ADR(LMP_VG[32].rVAC_SP), n:=SIZEOF(LMP_VG[32].rVAC_SP));
+
+(* Int controls to EPICS *)
+(* Integer controls from PLC TO EPICS *)
+
+mb_Output_Registers[0]:=INT_TO_WORD(LMP_VG[10].iTYPE);
+mb_Output_Registers[1]:=LMP_VG[10].wPG;
+mb_Output_Registers[2]:=LMP_VG[10].wHV_RO;
+mb_Output_Registers[3]:=INT_TO_WORD(LMP_VG[12].iTYPE);
+mb_Output_Registers[4]:=LMP_VG[12].wPG;
+mb_Output_Registers[5]:=LMP_VG[12].wHV_RO;
+mb_Output_Registers[6]:=INT_TO_WORD(LMP_VG[22].iTYPE);
+mb_Output_Registers[7]:=LMP_VG[22].wPG;
+mb_Output_Registers[8]:=LMP_VG[22].wHV_RO;
+mb_Output_Registers[9]:=INT_TO_WORD(LMP_VG[31].iTYPE);
+mb_Output_Registers[10]:=LMP_VG[31].wPG;
+mb_Output_Registers[11]:=LMP_VG[31].wHV_RO;
+mb_Output_Registers[12]:=INT_TO_WORD(LMP_VG[13].iTYPE);
+mb_Output_Registers[13]:=LMP_VG[13].wPG;
+mb_Output_Registers[14]:=LMP_VG[13].wHV_RO;
+mb_Output_Registers[15]:=INT_TO_WORD(LMP_VG[11].iTYPE);
+mb_Output_Registers[16]:=LMP_VG[11].wPG;
+mb_Output_Registers[17]:=LMP_VG[11].wHV_RO;
+mb_Output_Registers[18]:=INT_TO_WORD(LMP_VG[20].iTYPE);
+mb_Output_Registers[19]:=LMP_VG[20].wPG;
+mb_Output_Registers[20]:=LMP_VG[20].wHV_RO;
+mb_Output_Registers[21]:=INT_TO_WORD(LMP_VG[30].iTYPE);
+mb_Output_Registers[22]:=LMP_VG[30].wPG;
+mb_Output_Registers[23]:=LMP_VG[30].wHV_RO;
+mb_Output_Registers[24]:=INT_TO_WORD(LMP_VG[43].iTYPE);
+mb_Output_Registers[25]:=LMP_VG[43].wPG;
+mb_Output_Registers[26]:=LMP_VG[43].wHV_RO;
+mb_Output_Registers[27]:=INT_TO_WORD(LMP_VG[42].iTYPE);
+mb_Output_Registers[28]:=LMP_VG[42].wPG;
+mb_Output_Registers[29]:=LMP_VG[42].wHV_RO;
+mb_Output_Registers[30]:=INT_TO_WORD(LMP_VG[01].iTYPE);
+mb_Output_Registers[31]:=LMP_VG[01].wPG;
+mb_Output_Registers[32]:=LMP_VG[01].wHV_RO;
+mb_Output_Registers[33]:=INT_TO_WORD(LMP_VG[02].iTYPE);
+mb_Output_Registers[34]:=LMP_VG[02].wPG;
+mb_Output_Registers[35]:=LMP_VG[02].wHV_RO;
+mb_Output_Registers[36]:=INT_TO_WORD(LMP_VG[41].iTYPE);
+mb_Output_Registers[37]:=LMP_VG[41].wPG;
+mb_Output_Registers[38]:=LMP_VG[41].wHV_RO;
+mb_Output_Registers[39]:=INT_TO_WORD(LMP_VG[40].iTYPE);
+mb_Output_Registers[40]:=LMP_VG[40].wPG;
+mb_Output_Registers[41]:=LMP_VG[40].wHV_RO;
+mb_Output_Registers[42]:=INT_TO_WORD(LMP_VG[21].iTYPE);
+mb_Output_Registers[43]:=LMP_VG[21].wPG;
+mb_Output_Registers[44]:=LMP_VG[21].wHV_RO;
+mb_Output_Registers[45]:=INT_TO_WORD(LMP_VG[03].iTYPE);
+mb_Output_Registers[46]:=LMP_VG[03].wPG;
+mb_Output_Registers[47]:=LMP_VG[03].wHV_RO;
+mb_Output_Registers[48]:=INT_TO_WORD(LMP_VG[04].iTYPE);
+mb_Output_Registers[49]:=LMP_VG[04].wPG;
+mb_Output_Registers[50]:=LMP_VG[04].wHV_RO;
+mb_Output_Registers[51]:=INT_TO_WORD(LMP_VG[05].iTYPE);
+mb_Output_Registers[52]:=LMP_VG[05].wPG;
+mb_Output_Registers[53]:=LMP_VG[05].wHV_RO;
+mb_Output_Registers[54]:=INT_TO_WORD(LMP_VG[06].iTYPE);
+mb_Output_Registers[55]:=LMP_VG[06].wPG;
+mb_Output_Registers[56]:=LMP_VG[06].wHV_RO;
+mb_Output_Registers[57]:=INT_TO_WORD(LMP_VG[07].iTYPE);
+mb_Output_Registers[58]:=LMP_VG[07].wPG;
+mb_Output_Registers[59]:=LMP_VG[07].wHV_RO;
+mb_Output_Registers[60]:=INT_TO_WORD(g_iExtIlkGauge);
+mb_Output_Registers[61]:=INT_TO_WORD(aLMP_PTM[10].i_iErrorCode);
+mb_Output_Registers[62]:=INT_TO_WORD(aLMP_PTM[10].i_iWarningCode);
+mb_Output_Registers[63]:=INT_TO_WORD(aLMP_PTM[11].i_iErrorCode);
+mb_Output_Registers[64]:=INT_TO_WORD(aLMP_PTM[11].i_iWarningCode);
+mb_Output_Registers[65]:=INT_TO_WORD(aLMP_PTM[30].i_iErrorCode);
+mb_Output_Registers[66]:=INT_TO_WORD(aLMP_PTM[30].i_iWarningCode);
+mb_Output_Registers[67]:=INT_TO_WORD(aLMP_PTM[31].i_iErrorCode);
+mb_Output_Registers[68]:=INT_TO_WORD(aLMP_PTM[31].i_iWarningCode);
+mb_Output_Registers[69]:=INT_TO_WORD(aLMP_PTM[32].i_iErrorCode);
+mb_Output_Registers[70]:=INT_TO_WORD(aLMP_PTM[32].i_iWarningCode);
+mb_Output_Registers[71]:=INT_TO_WORD(aLMP_PTM[33].i_iErrorCode);
+mb_Output_Registers[72]:=INT_TO_WORD(aLMP_PTM[33].i_iWarningCode);
+mb_Output_Registers[73]:=INT_TO_WORD(aLMP_PTM[20].i_iErrorCode);
+mb_Output_Registers[74]:=INT_TO_WORD(aLMP_PTM[20].i_iWarningCode);
+mb_Output_Registers[75]:=INT_TO_WORD(aLMP_PTM[21].i_iErrorCode);
+mb_Output_Registers[76]:=INT_TO_WORD(aLMP_PTM[21].i_iWarningCode);
+mb_Output_Registers[77]:=INT_TO_WORD(LMP_VG[32].iTYPE);
+mb_Output_Registers[78]:=LMP_VG[32].wPG;
+mb_Output_Registers[79]:=LMP_VG[32].wHV_RO;
+
+ELSE
+
+(* Binary controls from EPICS to PLC *)
+
+aLMP_PTM[10].i_xRunSW:=mb_Output_Coils[100];
+aLMP_PTM[11].i_xRunSW:=mb_Output_Coils[101];
+aLMP_PTM[30].i_xRunSW:=mb_Output_Coils[102];
+aLMP_PTM[31].i_xRunSW:=mb_Output_Coils[103];
+aLMP_PTM[32].i_xRunSW:=mb_Output_Coils[104];
+aLMP_PTM[33].i_xRunSW:=mb_Output_Coils[105];
+aLMP_PTM[40].i_xRunSW:=mb_Output_Coils[106];
+LMP_PTM44.i_xRunSW:=mb_Output_Coils[107];
+aLMP_PTM[41].i_xRunSW:=mb_Output_Coils[108];
+aLMP_PTM[20].i_xRunSW:=mb_Output_Coils[109];
+aLMP_PTM[21].i_xRunSW:=mb_Output_Coils[110];
+LMP_VG[10].xHV_SW:=mb_Output_Coils[150];
+LMP_VG[12].xHV_SW:=mb_Output_Coils[151];
+LMP_VG[22].xHV_SW:=mb_Output_Coils[152];
+LMP_VG[31].xHV_SW:=mb_Output_Coils[153];
+LMP_VG[13].xHV_SW:=mb_Output_Coils[154];
+LMP_VG[11].xHV_SW:=mb_Output_Coils[155];
+LMP_VG[20].xHV_SW:=mb_Output_Coils[156];
+LMP_VG[30].xHV_SW:=mb_Output_Coils[157];
+LMP_VG[43].xHV_SW:=mb_Output_Coils[158];
+LMP_VG[42].xHV_SW:=mb_Output_Coils[159];
+LMP_VG[01].xHV_SW:=mb_Output_Coils[160];
+LMP_VG[02].xHV_SW:=mb_Output_Coils[161];
+LMP_VG[41].xHV_SW:=mb_Output_Coils[162];
+LMP_VG[40].xHV_SW:=mb_Output_Coils[163];
+LMP_VG[21].xHV_SW:=mb_Output_Coils[164];
+LMP_VG[03].xHV_SW:=mb_Output_Coils[165];
+LMP_VG[04].xHV_SW:=mb_Output_Coils[166];
+LMP_VG[05].xHV_SW:=mb_Output_Coils[167];
+
+LMP_VGC30.xOPN_SW:=mb_Output_Coils[10];
+LMP_VGC10.xOPN_SW:=mb_Output_Coils[11];
+LMP_VRC04.xOPN_SW:=mb_Output_Coils[12];
+LMP_VRC03.xOPN_SW:=mb_Output_Coils[13];
+LMP_VRC01.xOPN_SW:=mb_Output_Coils[14];
+LMP_VRC02.xOPN_SW:=mb_Output_Coils[15];
+LMP_VRC05.xOPN_SW:=mb_Output_Coils[16];
+LMP_VRC06.xOPN_SW:=mb_Output_Coils[17];
+LMP_VRC07.xOPN_SW:=mb_Output_Coils[18];
+LMP_VCCUSR.xOPN_SW:=mb_Output_Coils[60];
+
+LMP_VRC01.xOvrdOpn:=mb_Output_Coils[50];
+LMP_VRC02.xOvrdOpn:=mb_Output_Coils[51];
+LMP_VRC03.xOvrdOpn:=mb_Output_Coils[52];
+//LMP_VRC04.xOvrdOpn:=mb_Output_Coils[53];
+LMP_VRC05.xOvrdOpn:=mb_Output_Coils[54];
+LMP_VRC06.xOvrdOpn:=mb_Output_Coils[55];
+LMP_VRC07.xOvrdOpn:=mb_Output_Coils[56];
+
+(* Integer controls from EPICS to PLC *)
+
+LMP_VG[10].iTYPE:=WORD_TO_INT(mb_Output_Registers[0]);
+LMP_VG[10].wPG:=mb_Output_Registers[1];
+LMP_VG[10].wHV_RO:=mb_Output_Registers[2];
+LMP_VG[12].iTYPE:=WORD_TO_INT(mb_Output_Registers[3]);
+LMP_VG[12].wPG:=mb_Output_Registers[4];
+LMP_VG[12].wHV_RO:=mb_Output_Registers[5];
+LMP_VG[22].iTYPE:=WORD_TO_INT(mb_Output_Registers[6]);
+LMP_VG[22].wPG:=mb_Output_Registers[7];
+LMP_VG[22].wHV_RO:=mb_Output_Registers[8];
+LMP_VG[31].iTYPE:=WORD_TO_INT(mb_Output_Registers[9]);
+LMP_VG[31].wPG:=mb_Output_Registers[10];
+LMP_VG[31].wHV_RO:=mb_Output_Registers[11];
+LMP_VG[13].iTYPE:=WORD_TO_INT(mb_Output_Registers[12]);
+LMP_VG[13].wPG:=mb_Output_Registers[13];
+LMP_VG[13].wHV_RO:=mb_Output_Registers[14];
+LMP_VG[11].iTYPE:=WORD_TO_INT(mb_Output_Registers[15]);
+LMP_VG[11].wPG:=mb_Output_Registers[16];
+LMP_VG[11].wHV_RO:=mb_Output_Registers[17];
+LMP_VG[20].iTYPE:=WORD_TO_INT(mb_Output_Registers[18]);
+LMP_VG[20].wPG:=mb_Output_Registers[19];
+LMP_VG[20].wHV_RO:=mb_Output_Registers[20];
+LMP_VG[30].iTYPE:=WORD_TO_INT(mb_Output_Registers[21]);
+LMP_VG[30].wPG:=mb_Output_Registers[22];
+LMP_VG[30].wHV_RO:=mb_Output_Registers[23];
+LMP_VG[43].iTYPE:=WORD_TO_INT(mb_Output_Registers[24]);
+LMP_VG[43].wPG:=mb_Output_Registers[25];
+LMP_VG[43].wHV_RO:=mb_Output_Registers[26];
+LMP_VG[42].iTYPE:=WORD_TO_INT(mb_Output_Registers[27]);
+LMP_VG[42].wPG:=mb_Output_Registers[28];
+LMP_VG[42].wHV_RO:=mb_Output_Registers[29];
+LMP_VG[01].iTYPE:=WORD_TO_INT(mb_Output_Registers[30]);
+LMP_VG[01].wPG:=mb_Output_Registers[31];
+LMP_VG[01].wHV_RO:=mb_Output_Registers[32];
+LMP_VG[02].iTYPE:=WORD_TO_INT(mb_Output_Registers[33]);
+LMP_VG[02].wPG:=mb_Output_Registers[34];
+LMP_VG[02].wHV_RO:=mb_Output_Registers[35];
+LMP_VG[41].iTYPE:=WORD_TO_INT(mb_Output_Registers[36]);
+LMP_VG[41].wPG:=mb_Output_Registers[37];
+LMP_VG[41].wHV_RO:=mb_Output_Registers[38];
+LMP_VG[40].iTYPE:=WORD_TO_INT(mb_Output_Registers[39]);
+LMP_VG[40].wPG:=mb_Output_Registers[40];
+LMP_VG[40].wHV_RO:=mb_Output_Registers[41];
+LMP_VG[21].iTYPE:=WORD_TO_INT(mb_Output_Registers[42]);
+LMP_VG[21].wPG:=mb_Output_Registers[43];
+LMP_VG[21].wHV_RO:=mb_Output_Registers[44];
+LMP_VG[03].iTYPE:=WORD_TO_INT(mb_Output_Registers[45]);
+LMP_VG[03].wPG:=mb_Output_Registers[46];
+LMP_VG[03].wHV_RO:=mb_Output_Registers[47];
+LMP_VG[04].iTYPE:=WORD_TO_INT(mb_Output_Registers[48]);
+LMP_VG[04].wPG:=mb_Output_Registers[49];
+LMP_VG[04].wHV_RO:=mb_Output_Registers[50];
+LMP_VG[05].iTYPE:=WORD_TO_INT(mb_Output_Registers[51]);
+LMP_VG[05].wPG:=mb_Output_Registers[52];
+LMP_VG[05].wHV_RO:=mb_Output_Registers[53];
+LMP_VG[06].iTYPE:=WORD_TO_INT(mb_Output_Registers[54]);
+LMP_VG[06].wPG:=mb_Output_Registers[55];
+LMP_VG[06].wHV_RO:=mb_Output_Registers[56];
+LMP_VG[07].iTYPE:=WORD_TO_INT(mb_Output_Registers[57]);
+LMP_VG[07].wPG:=mb_Output_Registers[58];
+LMP_VG[07].wHV_RO:=mb_Output_Registers[59];
+g_iExtIlkGauge   :=WORD_TO_INT(mb_Output_Registers[60]);
+LMP_VG[32].iTYPE:=WORD_TO_INT(mb_Output_Registers[77]);
+LMP_VG[32].wPG:=mb_Output_Registers[78];
+LMP_VG[32].wHV_RO:=mb_Output_Registers[79];
+
+
+(* Real controls from EPICS (32-bit) to PLC *)
+
+MEMCPY(destAddr:=ADR(LMP_VG[10].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[100]), n:=SIZEOF(LMP_VG[10].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[12].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[102]), n:=SIZEOF(LMP_VG[12].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[22].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[104]), n:=SIZEOF(LMP_VG[22].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[31].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[106]), n:=SIZEOF(LMP_VG[31].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[13].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[108]), n:=SIZEOF(LMP_VG[13].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[11].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[110]), n:=SIZEOF(LMP_VG[11].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[20].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[112]), n:=SIZEOF(LMP_VG[20].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[30].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[114]), n:=SIZEOF(LMP_VG[30].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[43].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[116]), n:=SIZEOF(LMP_VG[43].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[42].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[118]), n:=SIZEOF(LMP_VG[42].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[01].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[120]), n:=SIZEOF(LMP_VG[01].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[02].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[122]), n:=SIZEOF(LMP_VG[02].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[41].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[124]), n:=SIZEOF(LMP_VG[41].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[40].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[126]), n:=SIZEOF(LMP_VG[40].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[21].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[128]), n:=SIZEOF(LMP_VG[21].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[03].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[130]), n:=SIZEOF(LMP_VG[03].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[04].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[132]), n:=SIZEOF(LMP_VG[04].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[05].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[134]), n:=SIZEOF(LMP_VG[05].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[06].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[136]), n:=SIZEOF(LMP_VG[06].rVAC_SP));
+MEMCPY(destAddr:=ADR(LMP_VG[07].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[138]), n:=SIZEOF(LMP_VG[07].rVAC_SP));
+MEMCPY(destAddr:=ADR(g_rExtIlkPres), srcAddr:=ADR(mb_PLC_Memory[140]), n:=SIZEOF(g_rExtIlkPres));
+MEMCPY(destAddr:=ADR(LMP_VG[32].rVAC_SP), srcAddr:=ADR(mb_PLC_Memory[142]), n:=SIZEOF(LMP_VG[32].rVAC_SP));
+END_IF
+
+(***********************************************************)]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

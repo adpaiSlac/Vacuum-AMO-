@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <GVL Name="GVL_Devices" Id="{b0c8a9be-743a-4147-b326-ff3e76549235}">
+    <Declaration><![CDATA[VAR_GLOBAL
+	
+(* Soft IO Variables include switch commands, interlocks and alarms mapped to EPICS *)
+	
+(* All Pfeiffer Pumps - on Port 1 of the Interaction chamber EP6002 *)
+	g_astPfe_CTRL 			: ARRAY[1..20] OF ST_PfeifferControl;
+	g_astPfe_RBK 			: ARRAY[1..20] OF ST_PfeifferStatus;
+	g_afbPfe_SerialDriver 	: ARRAY[1..20] OF FB_PfeifferSerialDriver;
+
+(* Port 1 of the R10 EB1 Serial Interface (corresponds to LMP_PTM44) *)
+	g_astTD20_RBK			: ST_TD20Status;
+	g_astTD20_SerialDriver	: FB_TD20SerialDriver;
+
+//Array of Pfeiffer PTM objects...see below
+ aLMP_PTM		:	ARRAY[10..41] OF ST_PfeifferPTM;
+	
+(*
+LAMP Pfeiffer PTM EPICS -> RS485 / array mapping (NOTE: RS485 address set in p_Initialize)
+
+Current name	RS485 address	New array name			Pump type
+(* Differential pumping *)
+LMP_PTM10			1			aLMP_PTM[10]		DP 300L/s
+LMP_PTM11			2			aLMP_PTM[11]     	DP 300L/s
+(* Interaction Chamber *)
+LMP_PTM20			7			aLMP_PTM[20]		IC 300L/s
+LMP_PTM21			8			aLMP_PTM[21]	 	IC 400L/s
+(* Detector Chamber *)
+LMP_PTM30			3			aLMP_PTM[30] 		DET 700L/s
+LMP_PTM31			4			aLMP_PTM[31]		DET 700L/s
+LMP_PTM32			5			aLMP_PTM[32]		DET 700L/s
+LMP_PTM33			6			aLMP_PTM[33]	 	DET 700L/s
+(* Gas Jet 1 *)
+LMP_PTM40			9			aLMP_PTM[40]	 	GJ 300L/s, TC110
+LMP_PTM41			10			aLMP_PTM[41]		GJ 300L/s, TC110
+ *)
+	LMP_PTM44	:	ST_OerlikonPTM;
+
+
+(* VGC *)
+	LMP_VGC30		:	ST_VGC;
+	LMP_VGC10		:	ST_VGC;
+	H2E_VGC01		:	ST_VGC;
+	H2E_VGC02		:	ST_VGC;
+
+(* VRC *)
+	LMP_VRC01		:	ST_VRC;
+	LMP_VRC02		:	ST_VRC;
+	LMP_VRC03		:	ST_VRC;
+	LMP_VRC04		:	ST_VRC;
+	LMP_VRC05		:	ST_VRC;
+	LMP_VRC06		:	ST_VRC;
+	LMP_VRC07		:	ST_VRC;
+
+(* VCC - the simplest kind *)
+	LMP_VCCUSR		:	ST_VCC;
+
+(* VG Vacuum Gauges *)
+	LMP_GPI_D1		:	ST_VG; (* dummy pirani, there is a difference, see the dumb_gauge function *)
+
+	LMP_VG			:	ARRAY[0..50] OF ST_VG;
+	H2E_VG01        :   ST_VG;
+	H2E_VG02		:	ST_VG;		
+
+(* Relay Outputs *)
+
+	LMP_RO	:	ARRAY[0..50] OF BOOL;
+
+(* Encoder *)
+	LMP_ENC01	:	ST_Encoder;
+	LMP_ENC02	:	ST_Encoder;
+	LMP_ENC03	:	ST_Encoder;
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

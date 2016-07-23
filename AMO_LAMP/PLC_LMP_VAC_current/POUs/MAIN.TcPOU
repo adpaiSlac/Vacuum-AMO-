@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4018.5">
+  <POU Name="MAIN" Id="{fa63d0c1-edd4-4c64-9ac0-a899eff655ea}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+
+	fbFSInit : R_TRIG;
+
+	fb_S_UPS	:	FB_S_UPS;
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* 	MAIN *)
+(* 	For this logic to work properly, program has to execute in the following order after initializaion,
+	1. EPICS Rx UPDATE
+	2. HARDWIRED I/O UPDATE
+	3. RESOLVE LOGIC
+	4. EPICS Tx UPDATE
+*)
+fb_S_UPS(iPLCPort:=851);
+
+(* INITIALIZATION - Make one pass on startup. *)
+	fbFSInit(CLK := TRUE,
+			  Q => LMP_Sys00.xFirstScan);
+
+	IF LMP_Sys00.xFirstScan THEN p_Initialize(); END_IF;
+
+(* 	EPICS Rx UPDATE
+ 	Modbus Map Receive - Do not refresh EPICS commands of first pass.
+	IMPORTANT: This is the FIRST subroutine TO be called after first-pass initialization. It must run AT the top OF the scan 
+*)
+	IF NOT LMP_Sys00.xFirstScan THEN p_ModbusMapRx(); END_IF;
+p_Autosave();
+
+(* 	HARD-WIRED I/O UPDATE
+	Update IO 
+*)
+p_Serial_PTM_IO();
+
+p_SoftIOMap();
+
+
+
+(* 	RESOLVE LOGIC
+	DeVRCe Control & Monitoring 
+*)
+p_PTMSup();
+p_GaugeSup();
+p_ValveSup();
+Encoders();
+Ext_Interlocks();
+
+
+(* 	EPICS Tx UPDATE
+	Modbus Map Receive
+	IMPORTANT: This is the LAST subroutine to be called. It must run at the bottom of the scan 
+*)
+p_ModbusMapTx();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
